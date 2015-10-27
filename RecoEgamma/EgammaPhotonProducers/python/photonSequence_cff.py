@@ -6,6 +6,7 @@ import FWCore.ParameterSet.Config as cms
 # photon producer
 from RecoEgamma.EgammaPhotonProducers.photonCore_cfi import *
 from RecoEgamma.EgammaPhotonProducers.photons_cfi import *
+from RecoHI.HiEgammaAlgos.photonIsolationHIProducer_cfi import photonIsolationHISequence
 
-photonSequence = cms.Sequence( photonCore + photons )
+photonSequence = cms.Sequence( photonCore + photons + photonIsolationHISequence)
 
