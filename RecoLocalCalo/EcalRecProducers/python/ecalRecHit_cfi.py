@@ -5,19 +5,11 @@ from RecoLocalCalo.EcalRecAlgos.ecalCleaningAlgo import cleaningAlgoConfig
 # rechit producer
 ecalRecHit = cms.EDProducer("EcalRecHitProducer",
     EErechitCollection = cms.string('EcalRecHitsEE'),
-    EEuncalibRecHitCollection = cms.InputTag("ecalMultiFitUncalibRecHit","EcalUncalibRecHitsEE"),
-    EBuncalibRecHitCollection = cms.InputTag("ecalMultiFitUncalibRecHit","EcalUncalibRecHitsEB"),
+    EEuncalibRecHitCollection = cms.InputTag("ecalGlobalUncalibRecHit","EcalUncalibRecHitsEE"),
+    EBuncalibRecHitCollection = cms.InputTag("ecalGlobalUncalibRecHit","EcalUncalibRecHitsEB"),
     EBrechitCollection = cms.string('EcalRecHitsEB'),
-    # db statuses to be exluded from reconstruction (some will be recovered)
-    ChannelStatusToBeExcluded = cms.vstring(   'kNoisy',
-                                               'kNNoisy',
-                                               'kFixedG6',
-                                               'kFixedG1',
-                                               'kFixedG0',
-                                               'kNonRespondingIsolated',
-                                               'kDeadVFE',
-                                               'kDeadFE',
-                                               'kNoDataNoTP',),
+    # channel flags to be exluded from reconstruction, e.g { 1, 2 }
+    ChannelStatusToBeExcluded = cms.vint32(),
     # avoid propagation of dead channels other than after recovery
     killDeadChannels = cms.bool(True),
     algo = cms.string("EcalRecHitWorkerSimple"),
@@ -26,23 +18,24 @@ ecalRecHit = cms.EDProducer("EcalRecHitProducer",
     EBLaserMIN = cms.double(0.5),
     EELaserMIN = cms.double(0.5),
 
-    EBLaserMAX = cms.double(3.0),
-    EELaserMAX = cms.double(8.0),
+    EBLaserMAX = cms.double(2),
+    EELaserMAX = cms.double(3),
 
 
     # apply laser corrections
     laserCorrection = cms.bool(True),
-                            
     # reco flags association to DB flag
-    flagsMapDBReco = cms.PSet(
-        kGood  = cms.vstring('kOk','kDAC','kNoLaser','kNoisy'),
-        kNoisy = cms.vstring('kNNoisy','kFixedG6','kFixedG1'),
-        kNeighboursRecovered = cms.vstring('kFixedG0',
-										   'kNonRespondingIsolated',
-										   'kDeadVFE'),
-        kTowerRecovered = cms.vstring('kDeadFE'),
-        kDead           = cms.vstring('kNoDataNoTP')
-        ),                        
+    # the vector index corresponds to the DB flag
+    # the value correspond to the reco flag
+    flagsMapDBReco = cms.vint32(
+             0,   0,   0,  0, # standard reco
+             4,               # faulty hardware (noisy)
+            -1,  -1,  -1,     # not yet assigned
+             4,   4,          # faulty hardware (fixed gain)
+             7,   7,   7,     # dead channel with trigger
+             8,               # dead FE
+             9                # dead or recovery failed
+            ),                        
                             
     # for channel recovery
     algoRecover = cms.string("EcalRecHitWorkerRecover"),
@@ -54,15 +47,12 @@ ecalRecHit = cms.EDProducer("EcalRecHitProducer",
     recoverEEFE = cms.bool(True),
     #db statuses for which recovery in EE/EB should not be attempted           
     dbStatusToBeExcludedEE = cms.vint32(
-                                        14,  # dead, no TP
-                                        78,  # dead, HV off
-                                        142, # dead,LV off
-                                        ), 
+                                        142
+                                        ), # dead,LV off
     dbStatusToBeExcludedEB = cms.vint32(
-                                        14,  # dead, no TP
-                                        78,  # dead, HV off
-                                        142, # dead,LV off
-                                        ), 
+                                        142
+                                        ), # dead,LV off
+                            
     # --- logWarnings for saturated DeadFEs
     # if the logWarningThreshold is negative the Algo will not try recovery (in EE is not tested we may need negative threshold e.g. -1.e+9)
     # if you want to enable recovery but you don't wish to throw logWarnings put the logWarningThresholds very high e.g +1.e+9
