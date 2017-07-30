@@ -15,8 +15,11 @@ gedGsfElectronsTmp.minSCEtEndcaps = cms.double(15.0)
 gedPhotonsTmp.primaryVertexProducer = cms.InputTag("hiSelectedVertex")
 gedPhotonsTmp.regressionConfig.vertexCollection = cms.InputTag("hiSelectedVertex")
 gedPhotonsTmp.isolationSumsCalculatorSet.trackProducer = cms.InputTag("hiGeneralTracks")
+gedPhotons.primaryVertexProducer = cms.InputTag("hiSelectedVertex")
+gedPhotons.isolationSumsCalculatorSet.trackProducer = cms.InputTag("hiGeneralTracks")
 from RecoHI.HiEgammaAlgos.photonIsolationHIProducer_cfi import photonIsolationHIProducer
 photonIsolationHIProducerGED = photonIsolationHIProducer.clone(photonProducer=cms.InputTag("gedPhotonsTmp"))
+photonIsolationHIProducerGEDPFrelink = photonIsolationHIProducer.clone(photonProducer=cms.InputTag("gedPhotons"))
 
 #These are set for consistency w/ HiElectronSequence, but these cuts need to be studied
 gedGsfElectronsTmp.maxHOverEBarrel = cms.double(0.25)
@@ -73,8 +76,12 @@ particleFlowTmp.usePFElectrons = cms.bool(True)
 particleFlowTmp.muons = cms.InputTag("hiMuons1stStep")
 particleFlowTmp.usePFConversions = cms.bool(False)
 
+pfNoPileUpIso.enable = False
+pfPileUpIso.Enable = False
+pfNoPileUp.enable = False
+pfPileUp.Enable = False
+particleFlow.Muons = cms.InputTag("muons","hiMuons1stStep2muonsMap")
 
-from RecoHI.HiJetAlgos.HiRecoPFJets_cff import *
 
 # local reco must run before electrons (RecoHI/HiEgammaAlgos), due to PF integration
 hiParticleFlowLocalReco = cms.Sequence(particleFlowCluster)
@@ -86,5 +93,10 @@ hiParticleFlowReco = cms.Sequence( pfGsfElectronMVASelectionSequence
                                    * particleFlowEGammaFull
                                    * photonIsolationHIProducerGED
                                    * particleFlowTmp
-                                   * hiRecoPFJets
+                                   * particleFlowTmpPtrs          
+                                   * particleFlowEGammaFinal
+                                   * pfParticleSelectionSequence 
+                                   * photonIsolationHIProducerGEDPFrelink
                                    )
+
+particleFlowLinks = cms.Sequence( particleFlow*particleFlowPtrs*particleBasedIsolationSequence)
