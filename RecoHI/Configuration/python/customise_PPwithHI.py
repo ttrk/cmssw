@@ -54,6 +54,11 @@ def addHIIsolationProducer(process):
                                                   'keep recoHIPhotonIsolationedmValueMap_photonIsolationHIProducerpp_*_*',
                                                   'keep recoCaloClusters_islandBasicClusters_*_*'
                                                   ])
+
+    process.RECODEBUGEventContent.outputCommands.extend(['keep recoHIPhotonIsolationedmValueMap_photonIsolationHIProducerppGED_*_*',
+                                                  'keep recoHIPhotonIsolationedmValueMap_photonIsolationHIProducerpp_*_*',
+                                                  'keep recoCaloClusters_islandBasicClusters_*_*'
+                                                  ])
     
     process.RAWRECODEBUGHLTEventContent.outputCommands.extend(['keep recoHIPhotonIsolationedmValueMap_photonIsolationHIProducerppGED_*_*',
                                                   'keep recoHIPhotonIsolationedmValueMap_photonIsolationHIProducerpp_*_*',
