@@ -183,7 +183,8 @@ process.load('HeavyIonsAnalysis.JetAnalysis.TrkAnalyzers_cff')
 #####################
 process.load('HeavyIonsAnalysis.PhotonAnalysis.ggHiNtuplizer_cfi')
 process.ggHiNtuplizer.gsfElectronLabel         = "gedGsfElectrons"
-process.ggHiNtuplizer.recoPhotonHiIsolationMap = 'photonIsolationHIProducerpp'
+process.ggHiNtuplizer.recoPhotonSrc            = "islandPhotons"
+process.ggHiNtuplizer.recoPhotonHiIsolationMap = "photonIsolationHIProducerppIsland"
 process.ggHiNtuplizer.useValMapIso             = True
 process.ggHiNtuplizer.VtxLabel                 = "offlinePrimaryVertices"
 process.ggHiNtuplizer.particleFlowCollection   = "particleFlow"
