@@ -129,8 +129,8 @@ void l1t::Stage2Layer2EGammaAlgorithmFirmwareImp1::processEvent(const std::vecto
       bool hOverEBit = cluster.hOverE()>0;
       if(!params_->egBypassExtHOverE())
 	hOverEBit &= HoE_ext;
-      bool shapeBit  = idShape(cluster, egamma.hwPt());
-      bool fgBit     = !(cluster.fgECAL()); 
+      bool shapeBit  = (params_->egBypassShapeBit() || idShape(cluster, egamma.hwPt()));
+      bool fgBit     = (params_->egBypassFGBit() || !(cluster.fgECAL()));
       int qual = 0;
       if(fgBit)     qual |= (0x1); // first bit = FG
       if(hOverEBit) qual |= (0x1<<1); // second bit = H/E

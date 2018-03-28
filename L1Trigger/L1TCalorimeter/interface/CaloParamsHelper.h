@@ -51,7 +51,9 @@ namespace l1t {
 	   layer1HOverE=39,
 	   PUTowerThreshold=40,
 	   tauTrimmingShapeVeto=41,
-	   NUM_CALOPARAMNODES=42
+           egBypassFGBitFlag=42,
+           egBypassShapeBitFlag=43,
+	   NUM_CALOPARAMNODES=44
     };
 
     CaloParamsHelper() { pnode_.resize(NUM_CALOPARAMNODES); }
@@ -142,6 +144,8 @@ namespace l1t {
     int egMaxPtHOverEIsolation() const { return egp_.maxPtHOverEIsolation_; }
     unsigned egBypassEGVetos() { return pnode_[egBypassEGVetosFlag].uparams_[0]; }
     unsigned egBypassExtHOverE() { return pnode_[egBypassExtHoE].uparams_[0]; }
+    unsigned egBypassFGBit() { return pnode_[egBypassFGBitFlag].uparams_[0]; }
+    unsigned egBypassShapeBit() { return pnode_[egBypassShapeBitFlag].uparams_[0]; }
     int egHOverEcutBarrel() const {return pnode_[egHOverEBarrel].iparams_[0]; }
     int egHOverEcutEndcap() const {return pnode_[egHOverEEndcap].iparams_[0]; }
 
@@ -185,11 +189,19 @@ namespace l1t {
       pnode_[egBypassExtHoE].uparams_.resize(1);
       pnode_[egBypassExtHoE].uparams_[0] = flag;
     }
-    void setEgHOverEcutBarrel(int cut) { 
+    void setEgBypassFGBit(unsigned flag) {
+      pnode_[egBypassFGBitFlag].uparams_.resize(1);
+      pnode_[egBypassFGBitFlag].uparams_[0] = flag;
+    }
+    void setEgBypassShapeBit(unsigned flag) {
+      pnode_[egBypassShapeBitFlag].uparams_.resize(1);
+      pnode_[egBypassShapeBitFlag].uparams_[0] = flag;
+    }
+    void setEgHOverEcutBarrel(int cut) {
       pnode_[egHOverEBarrel].iparams_.resize(1);
       pnode_[egHOverEBarrel].iparams_[0] = cut; 
     }
-    void setEgHOverEcutEndcap(int cut) { 
+    void setEgHOverEcutEndcap(int cut) {
       pnode_[egHOverEEndcap].iparams_.resize(1);
       pnode_[egHOverEEndcap].iparams_[0] = cut; 
     }
