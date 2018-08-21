@@ -31,15 +31,18 @@ std::vector<reco::BasicCluster> IslandClusterAlgo::makeClusters(
 
   double threshold = 0;
   std::string ecalPart_string;
+  std::vector<int> v_chstatus;
   if (ecalPart == endcap) 
     {
       threshold = ecalEndcapSeedThreshold;
       ecalPart_string = "EndCap";
+      v_chstatus = v_chstatus_Endcap_;
     }
   if (ecalPart == barrel) 
     {
       threshold = ecalBarrelSeedThreshold;
       ecalPart_string = "Barrel";
+      v_chstatus = v_chstatus_Barrel_;
     }
 
   if (verbosity < pINFO)
@@ -59,6 +62,13 @@ std::vector<reco::BasicCluster> IslandClusterAlgo::makeClusters(
       {
 	double energy = it->energy();
 	if (energy < threshold) continue; // need to check to see if this line is useful!
+
+        // avoid seeding for anomalous channels
+	if(! it->checkFlag(EcalRecHit::kGood)) { // if rechit is good, no need for further checks
+	  if (it->checkFlags( v_chstatus )) {
+	     continue; // the recHit has to be excluded from seeding
+	  }
+        }
 
 	auto thisCell = geometry_p->getGeometry(it->id());
 	auto const &  position = thisCell->getPosition();
