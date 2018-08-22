@@ -36,11 +36,13 @@ islandBasicClusters = cms.EDProducer("IslandClusterProducer",
     # recHit flags to be excluded from clustering
     RecHitFlagToBeExcludedEB = cms.vstring(
         'kWeird',
+        'kDiWeird',
         'kOutOfTime',
         'kTowerRecovered'
         ),
     RecHitFlagToBeExcludedEE = cms.vstring(
         'kWeird',
+        'kDiWeird',
         'kOutOfTime',
         'kTowerRecovered'
         )
