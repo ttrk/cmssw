@@ -120,7 +120,6 @@ process.ggHiNtuplizer.recoPhotonHiIsolationMap = 'photonIsolationHIProducerpp'
 process.ggHiNtuplizer.useValMapIso             = True
 process.ggHiNtuplizer.VtxLabel                 = "offlinePrimaryVertices"
 process.ggHiNtuplizer.particleFlowCollection   = "particleFlow"
-process.ggHiNtuplizer.doVsIso                  = False
 process.ggHiNtuplizer.doElectronVID            = True
 
 process.ggHiNtuplizerGED = process.ggHiNtuplizer.clone(
