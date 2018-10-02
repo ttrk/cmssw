@@ -1125,6 +1125,128 @@ def getPPRefHighPtVPSet():
 
     return ret
 
+def getPbPb2018PhotonVPSet():
+    ret = cms.VPSet()
+
+    # GED-style photons: 10
+    pathname = 'HLT_HIGEDPhoton10_v'
+
+    hltHIGEDPhoton10 = cms.PSet(
+        handlerType = cms.string("FromHLT"),
+        partialPathName = cms.string(pathname),
+        partialFilterName  = cms.string("hltEG10HoverELoosePPOnAAFilter"),
+        dqmhistolabel  = cms.string("hltHIGEDPhoton10"),
+        triggerSelection = cms.string(pathname + "*"),
+        mainDQMDirname = cms.untracked.string(dirname),
+        singleObjectsPreselection = cms.string("1==1"),
+        singleObjectDrawables =  cms.VPSet(
+            cms.PSet(
+                name = cms.string("pt"),
+                expression = cms.string("pt"),
+                bins = cms.int32(58),
+                min = cms.double(10),
+                max = cms.double(300)),
+            cms.PSet(
+                name = cms.string("eta"),
+                expression = cms.string("eta"),
+                bins = cms.int32(100),
+                min = cms.double(-3),
+                max = cms.double(3)),
+            cms.PSet(
+                name = cms.string("phi"),
+                expression = cms.string("phi"),
+                bins = cms.int32(100),
+                min = cms.double(-3.15),
+                max = cms.double(3.15))
+            ),
+        combinedObjectSelection =  cms.string("1==1"),
+        combinedObjectSortCriteria = cms.string("at(0).pt"),
+        combinedObjectDimension = cms.int32(1),
+        combinedObjectDrawables =  cms.VPSet()
+        )
+
+    ret.append(hltHIGEDPhoton10)
+
+    # additional GED-style photons: 15, 20, 30, 40, 50, 60
+    gedPhotonThresholds = ['15', '20', '30', '40', '50', '60']
+    for thresh in gedPhotonThresholds:
+        pathname = 'HLT_HIGEDPhoton' + thresh + '_v'
+        hltHIGEDPhotonXX = hltHIGEDPhoton10.clone(
+            partialPathName = pathname,
+            triggerSelection = pathname + '*',
+            dqmhistolabel = 'hltHIGEDPhoton' + thresh,
+            partialFilterName = 'hltEG' + thresh + 'HoverELoosePPOnAAFilter'
+            )
+
+        ret.append(hltHIGEDPhotonXX)
+
+    # GED-style photons in EB
+    gedPhotonEBThresholds = ['10', '15', '20', '30', '40', '50', '60']
+    for thresh in gedPhotonEBThresholds:
+        pathname = 'HLT_HIGEDPhoton' + thresh + '_EB_v'
+        hltHIGEDPhotonXXEB = hltHIGEDPhoton10.clone(
+            partialPathName = pathname,
+            triggerSelection = pathname + '*',
+            dqmhistolabel = 'hltHIGEDPhoton' + thresh + "EB",
+            partialFilterName = 'hltEG' + thresh + 'HoverELooseEBPPOnAAFilter'
+            )
+
+        ret.append(hltHIGEDPhotonXXEB)
+
+    # GED-style photons with H/E cut
+    gedPhotonHECutThresholds = ['10', '15', '20', '30', '40', '50', '60']
+    for thresh in gedPhotonHECutThresholds:
+        pathname = 'HLT_HIGEDPhoton' + thresh + '_HECut_v'
+        hltHIGEDPhotonXXHECut = hltHIGEDPhoton10.clone(
+            partialPathName = pathname,
+            triggerSelection = pathname + '*',
+            dqmhistolabel = 'hltHIGEDPhoton' + thresh + "HECut",
+            partialFilterName = 'hltEG' + thresh + 'HoverEPPOnAAFilter'
+            )
+
+        ret.append(hltHIGEDPhotonXXHECut)
+
+    # GED-style photons with H/E cut in EB
+    gedPhotonEBHECutThresholds = ['10', '15', '20', '30', '40', '50', '60']
+    for thresh in gedPhotonEBHECutThresholds:
+        pathname = 'HLT_HIGEDPhoton' + thresh + '_EB_HECut_v'
+        hltHIGEDPhotonXXEBHECut = hltHIGEDPhoton10.clone(
+            partialPathName = pathname,
+            triggerSelection = pathname + '*',
+            dqmhistolabel = 'hltHIGEDPhoton' + thresh + "EBHECut",
+            partialFilterName = 'hltEG' + thresh + 'HoverEEBPPOnAAFilter'
+            )
+
+        ret.append(hltHIGEDPhotonXXEBHECut)
+
+    # Island photons
+    islandPhotonThresholds = ['10', '15', '20', '30', '40', '50', '60']
+    for thresh in islandPhotonThresholds:
+        pathname = 'HLT_HIIslandPhoton' + thresh + '_Eta3p1_v'
+        hltHIIslandPhotonXX3p1 = hltHIGEDPhoton10.clone(
+            partialPathName = pathname,
+            triggerSelection = pathname + '*',
+            dqmhistolabel = 'hltHIIslandPhoton' + thresh + "Eta3p1",
+            partialFilterName = 'hltHIIslandPhoton' + thresh + 'Eta3p1'
+            )
+
+        ret.append(hltHIIslandPhotonXX3p1)
+
+    # Island photons in EB
+    islandPhotonEBThresholds = ['10', '15', '20', '30', '40', '50', '60']
+    for thresh in islandPhotonEBThresholds:
+        pathname = 'HLT_HIIslandPhoton' + thresh + '_Eta1p5_v'
+        hltHIIslandPhotonXX1p5 = hltHIGEDPhoton10.clone(
+            partialPathName = pathname,
+            triggerSelection = pathname + '*',
+            dqmhistolabel = 'hltHIIslandPhoton' + thresh + "Eta1p5",
+            partialFilterName = 'hltHIIslandPhoton' + thresh + 'Eta1p5'
+            )
+
+        ret.append(hltHIIslandPhotonXX1p5)
+
+    return ret
+
 def getHILowLumi():
     ret = cms.VPSet()
     ret.extend(getHILowLumiTriggers())
@@ -1135,6 +1257,7 @@ def getHILowLumi():
     ret.extend(getPAHighPtVPSet())
     ret.extend(getHILowPU2017Triggers())
     ret.extend(getPPRefHighPtVPSet())
+    ret.extend(getPbPb2018PhotonVPSet())
     return ret
 
 dirname = "HLT/HI/"
