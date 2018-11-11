@@ -5,6 +5,9 @@ from HeavyIonsAnalysis.PhotonAnalysis.ElectronVID_cff import *
 ggHiNtuplizer = cms.EDAnalyzer(
     "ggHiNtuplizer",
     doGenParticles     = cms.bool(True),
+    doElectrons        = cms.bool(False),
+    doPhotons          = cms.bool(True),
+    doMuons            = cms.bool(False),
     runOnParticleGun   = cms.bool(False),
     useValMapIso       = cms.bool(True),
     doElectronVID      = cms.bool(False),

@@ -123,6 +123,8 @@ process.ggHiNtuplizer.particleFlowCollection   = "particleFlow"
 process.ggHiNtuplizer.doElectronVID            = True
 
 process.ggHiNtuplizerGED = process.ggHiNtuplizer.clone(
+    doElectrons = True,
+    doMuons = True,
     recoPhotonSrc = cms.InputTag('gedPhotons'),
     recoPhotonHiIsolationMap = cms.InputTag('photonIsolationHIProducerppGED'))
 
