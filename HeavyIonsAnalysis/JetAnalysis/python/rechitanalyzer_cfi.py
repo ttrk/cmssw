@@ -1,48 +1,51 @@
 import FWCore.ParameterSet.Config as cms
 
 rechitanalyzer = cms.EDAnalyzer("RecHitTreeProducer",
-  EBRecHitSrc = cms.untracked.InputTag("ecalRecHit","EcalRecHitsEB"),
-  EERecHitSrc = cms.untracked.InputTag("ecalRecHit","EcalRecHitsEE"),
-  BasicClusterSrc1 = cms.untracked.InputTag("islandBasicClusters","islandBarrelBasicClusters"),
-  hcalHFRecHitSrc = cms.untracked.InputTag("hfreco"),
-  hcalHBHERecHitSrc = cms.untracked.InputTag("hbhereco"),
-  towersSrc = cms.untracked.InputTag("towerMaker"),
-  JetSrc = cms.untracked.InputTag("iterativeConePu5CaloJets"),
-  zdcRecHitSrc = cms.untracked.InputTag("zdcreco"),
-  useJets = cms.untracked.bool(True),
-  doBasicClusters = cms.untracked.bool(False),
-  doTowers = cms.untracked.bool(True),
-  doEcal = cms.untracked.bool(True),
-  doHcal = cms.untracked.bool(True),
-  hasVtx = cms.untracked.bool(True),
-  doFastJet = cms.untracked.bool(False),
-  FastJetTag = cms.untracked.InputTag("kt4CaloJets"),
-  doEbyEonly = cms.untracked.bool(False),
-  HFtowerMin = cms.untracked.double(3),
-  HFlongMin = cms.untracked.double(0.5),
-  HFshortMin = cms.untracked.double(0.85),
-                                doVS = cms.untracked.bool(True),
-                                bkg = cms.InputTag("voronoiBackgroundCalo"),
-                                etaBins = cms.int32(15),
-                                fourierOrder = cms.int32(5),
-                                doUEraw_ = cms.untracked.bool(False),     
-                                
-                                )
+    doEbyEonly = cms.bool(False),
+    doBasicClusters = cms.bool(False),
+    doTowers = cms.bool(True),
+    doEcal = cms.bool(False),
+    doHBHE = cms.bool(False),
+    doHF = cms.bool(True),
+    doFastJet = cms.bool(False),
+    doCASTOR = cms.bool(True),
+    doZDCRecHit = cms.bool(False),
+    doZDCDigi = cms.bool(False),
 
-pfTowers = rechitanalyzer.clone(
-    doEcal  = cms.untracked.bool(False),
-    doHcal  = cms.untracked.bool(False),
-    hasVtx  = cms.untracked.bool(False),
-    doFastJet = cms.untracked.bool(False),
-    towersSrc = cms.untracked.InputTag("PFTowers"),
-    TowerTreePtMin = cms.untracked.double(-99),
-    doVS = cms.untracked.bool(False),    
+    EBRecHitSrc = cms.InputTag("ecalRecHit","EcalRecHitsEB"),
+    EERecHitSrc = cms.InputTag("ecalRecHit","EcalRecHitsEE"),
+    BasicClusterSrc = cms.InputTag("islandBasicClusters","islandBarrelBasicClusters"),
+    hcalHFRecHitSrc = cms.InputTag("hfreco"),
+    hcalHBHERecHitSrc = cms.InputTag("hbhereco"),
+    towersSrc = cms.InputTag("towerMaker"),
+    FastJetRhoTag = cms.InputTag("kt4CaloJets"),
+    FastJetSigmaTag = cms.InputTag("kt4CaloJets"),
+    castorRecHitSrc = cms.InputTag("castorreco"),
+    zdcRecHitSrc = cms.InputTag("zdcreco"),
+    zdcDigiSrc = cms.InputTag("hcalDigis"),
+
+    nZdcTs = cms.int32(10),
+    calZDCDigi = cms.bool(True),
+
+    hasVtx = cms.bool(True),
+    vtxSrc = cms.InputTag("hiSelectedVertex"),
+    useJets = cms.bool(False),
+    JetSrc = cms.InputTag("iterativeConePu5CaloJets"),
+    saveBothVtx = cms.bool(False),
+
+    HFtowerMin = cms.untracked.double(3),
+    HFlongMin = cms.untracked.double(0.5),
+    HFshortMin = cms.untracked.double(0.85),
+    HBHETreePtMin = cms.untracked.double(15),
+    HFTreePtMin = cms.untracked.double(15),
+    EBTreePtMin = cms.untracked.double(15),
+    EETreePtMin = cms.untracked.double(15),
+    TowerTreePtMin = cms.untracked.double(-9999),
     )
 
-
-rechitanalyzer.HBHETreePtMin = cms.untracked.double(15)
-rechitanalyzer.HFTreePtMin = cms.untracked.double(15)
-rechitanalyzer.EBTreePtMin = cms.untracked.double(15)
-rechitanalyzer.EETreePtMin = cms.untracked.double(15)
-rechitanalyzer.TowerTreePtMin = cms.untracked.double(-9999)
-rechitanalyzer.doHF = cms.untracked.bool(True)
+pfTowers = rechitanalyzer.clone(
+    doHF = cms.bool(False),
+    hasVtx = cms.bool(False),
+    towersSrc = cms.InputTag("PFTowers"),
+    TowerTreePtMin = cms.untracked.double(-99),
+    )
