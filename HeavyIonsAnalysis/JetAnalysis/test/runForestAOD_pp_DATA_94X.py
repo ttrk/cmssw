@@ -26,7 +26,7 @@ process.HiForest.HiForestVersion = cms.string(version)
 
 process.source = cms.Source("PoolSource",
                             fileNames = cms.untracked.vstring(
-        '/store/data/Run2017G/DoubleMuon/AOD/17Nov2017-v1/80000/B674434A-EE3C-E811-95AA-0CC47A7E6A5C.root'
+        '/store/data/Run2017G/DoubleMuon/AOD/17Nov2017-v1/90001/F85E677C-D92E-E811-8DC4-C4346BC85718.root'
                             )
 )
 
@@ -72,10 +72,10 @@ process.TFileService = cms.Service("TFileService",
 
 ### PP RECO does not include R=3 or R=5 jets.
 ### re-RECO is only possible for PF, RECO is missing calotowers
-from RecoJets.JetProducers.ak5PFJets_cfi import ak5PFJets
-ak5PFJets.doAreaFastjet = True
-process.ak5PFJets = ak5PFJets
-process.ak3PFJets = ak5PFJets.clone(rParam = 0.3)
+from RecoJets.JetProducers.ak4PFJets_cfi import ak4PFJets
+ak4PFJets.doAreaFastjet = True
+process.ak5PFJets = ak4PFJets.clone(rParam = 0.5)
+process.ak3PFJets = ak4PFJets.clone(rParam = 0.3)
 
 process.load('HeavyIonsAnalysis.JetAnalysis.jets.ak4CaloJetSequence_pp_data_cff')
 
