@@ -101,8 +101,6 @@ void HLTInfo::analyze(const edm::Handle<edm::TriggerResults>                 & h
 	TString trigName(dummyBranche.data());
 	HltTree->Branch(trigName,trigflag+itdum,trigName+"/I");
 	HltTree->Branch(trigName+"_Prescl",trigPrescl+itdum,trigName+"_Prescl/I");
-	trigflag[itdum] = 0;
-	trigPrescl[itdum] = 0;
 	pathtoindex[dummyBranche] = itdum;
 	++itdum;
       }
@@ -165,8 +163,6 @@ void HLTInfo::analyze(const edm::Handle<edm::TriggerResults>                 & h
 	TString trigName(dummy.data());
 	HltTree->Branch(trigName,l1flag+itdum,trigName+"/I");
 	HltTree->Branch(trigName+"_Prescl",l1Prescl+itdum,trigName+"_Prescl/I");
-	l1flag[itdum] = 0;
-	l1Prescl[itdum] = 0;
 	pathtoindex[dummy] = itdum;
 	++itdum;
       }
