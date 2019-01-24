@@ -180,7 +180,7 @@ process.ana_step = cms.Path(
     process.HiForest +
     process.hltanalysis +
     process.hltobject +
-    process.l1object +
+    #process.l1object +
     process.centralityBin +
     process.hiEvtAnalyzer +
     process.jetSequence +
