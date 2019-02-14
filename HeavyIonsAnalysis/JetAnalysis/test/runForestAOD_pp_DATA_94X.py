@@ -7,15 +7,15 @@ import FWCore.ParameterSet.Config as cms
 process = cms.Process('HiForest')
 process.options = cms.untracked.PSet()
 
-
 #####################################################################################
 # HiForest labelling info
 #####################################################################################
 
 process.load("HeavyIonsAnalysis.JetAnalysis.HiForest_cff")
-process.HiForest.inputLines = cms.vstring("HiForest V3",)
-import subprocess
-version = subprocess.Popen(["(cd $CMSSW_BASE/src && git describe --tags)"], stdout=subprocess.PIPE, shell=True).stdout.read()
+process.HiForest.inputLines = cms.vstring("HiForest 94X",)
+import subprocess, os
+version = subprocess.check_output(['git',
+    '-C', os.path.expandvars('$CMSSW_BASE/src'), 'describe', '--tags'])
 if version == '':
     version = 'no git info'
 process.HiForest.HiForestVersion = cms.string(version)
@@ -25,15 +25,14 @@ process.HiForest.HiForestVersion = cms.string(version)
 #####################################################################################
 
 process.source = cms.Source("PoolSource",
-                            fileNames = cms.untracked.vstring(
-        '/store/data/Run2017G/DoubleMuon/AOD/17Nov2017-v1/90001/F85E677C-D92E-E811-8DC4-C4346BC85718.root'
-                            )
+    fileNames = cms.untracked.vstring(
+	'/store/data/Run2017G/DoubleMuon/AOD/17Nov2017-v1/90001/F85E677C-D92E-E811-8DC4-C4346BC85718.root'
+    )
 )
 
 # Number of events we want to process, -1 = all events
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(5))
-
+    input = cms.untracked.int32(1))
 
 #####################################################################################
 # Load Global Tag, Geometry, etc.
@@ -42,10 +41,10 @@ process.maxEvents = cms.untracked.PSet(
 process.load('Configuration.StandardSequences.Services_cff')
 process.load('Configuration.Geometry.GeometryRecoDB_cff')
 process.load('Configuration.StandardSequences.MagneticField_38T_cff')
-process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff')
+process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 process.load('FWCore.MessageService.MessageLogger_cfi')
 
-from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
+from Configuration.AlCa.GlobalTag import GlobalTag
 process.GlobalTag = GlobalTag(process.GlobalTag, '94X_dataRun2_ReReco_EOY17_v6', '')
 process.HiForest.GlobalTagLabel = process.GlobalTag.globaltag
 
@@ -57,21 +56,16 @@ process = overrideJEC_pp5020(process)
 #####################################################################################
 
 process.TFileService = cms.Service("TFileService",
-                                   fileName=cms.string("HiForestAOD.root")
-                                  )
+    fileName = cms.string("HiForestAOD.root"))
 
 #####################################################################################
 # Additional Reconstruction and Analysis: Main Body
 #####################################################################################
 
-####################################################################################
-
 #############################
 # Jets
 #############################
 
-### PP RECO does not include R=3 or R=5 jets.
-### re-RECO is only possible for PF, RECO is missing calotowers
 from RecoJets.JetProducers.ak4PFJets_cfi import ak4PFJets
 ak4PFJets.doAreaFastjet = True
 process.ak5PFJets = ak4PFJets.clone(rParam = 0.5)
@@ -84,11 +78,9 @@ process.load('HeavyIonsAnalysis.JetAnalysis.jets.ak4PFJetSequence_pp_data_cff')
 process.load('HeavyIonsAnalysis.JetAnalysis.jets.ak5PFJetSequence_pp_data_cff')
 
 process.highPurityTracks = cms.EDFilter("TrackSelector",
-                                        src = cms.InputTag("generalTracks"),
-                                        cut = cms.string('quality("highPurity")')
-                                        )
-
-
+    src = cms.InputTag("generalTracks"),
+    cut = cms.string('quality("highPurity")')
+)
 
 process.jetSequences = cms.Sequence(
     process.ak3PFJets +
@@ -98,7 +90,7 @@ process.jetSequences = cms.Sequence(
     process.ak3PFJetSequence +
     process.ak4PFJetSequence +
     process.ak5PFJetSequence
-    )
+)
 
 #####################################################################################
 
@@ -138,16 +130,19 @@ process.load('HeavyIonsAnalysis.JetAnalysis.TrkAnalyzers_cff')
 # Photons
 #####################
 process.load('HeavyIonsAnalysis.PhotonAnalysis.ggHiNtuplizer_cfi')
-process.ggHiNtuplizer.gsfElectronLabel   = cms.InputTag("gedGsfElectrons")
-process.ggHiNtuplizer.recoPhotonHiIsolationMap = cms.InputTag('photonIsolationHIProducerpp')
-process.ggHiNtuplizer.useValMapIso = cms.bool(True) # set to False if it gives error due to "not found" photonIsolationHIProducer
-process.ggHiNtuplizer.VtxLabel  = cms.InputTag("offlinePrimaryVertices")
-process.ggHiNtuplizer.particleFlowCollection = cms.InputTag("particleFlow")
-process.ggHiNtuplizer.doVsIso   = cms.bool(False)
-process.ggHiNtuplizer.doGenParticles = False
-process.ggHiNtuplizer.doElectronVID = cms.bool(True)
-process.ggHiNtuplizerGED = process.ggHiNtuplizer.clone(recoPhotonSrc = cms.InputTag('gedPhotons'),
-                                                       recoPhotonHiIsolationMap = cms.InputTag('photonIsolationHIProducerppGED'))
+process.ggHiNtuplizer.gsfElectronLabel         = "gedGsfElectrons"
+process.ggHiNtuplizer.recoPhotonHiIsolationMap = 'photonIsolationHIProducerpp'
+# set to False if it gives error due to "not found" photonIsolationHIProducer
+process.ggHiNtuplizer.useValMapIso             = True
+process.ggHiNtuplizer.VtxLabel                 = "offlinePrimaryVertices"
+process.ggHiNtuplizer.particleFlowCollection   = "particleFlow"
+process.ggHiNtuplizer.doVsIso                  = False
+process.ggHiNtuplizer.doGenParticles           = False
+process.ggHiNtuplizer.doElectronVID            = True
+
+process.ggHiNtuplizerGED = process.ggHiNtuplizer.clone(
+    recoPhotonSrc = cms.InputTag('gedPhotons'),
+    recoPhotonHiIsolationMap = cms.InputTag('photonIsolationHIProducerppGED'))
 
 ####################################################################################
 
@@ -164,7 +159,7 @@ switchOnVIDElectronIdProducer(process, dataFormat)
 # define which IDs we want to produce. Check here https://twiki.cern.ch/twiki/bin/viewauth/CMS/CutBasedElectronIdentificationRun2#Recipe_for_regular_users_for_7_4
 my_id_modules = ['RecoEgamma.ElectronIdentification.Identification.cutBasedElectronID_Spring15_25ns_V1_cff']
 
-#add them to the VID producer
+# add them to the VID producer
 for idmod in my_id_modules:
     setupAllVIDIdsInModule(process,idmod,setupVIDElectronSelection)
 
@@ -174,18 +169,19 @@ for idmod in my_id_modules:
 # Main analysis list
 #########################
 
-
-process.ana_step = cms.Path(process.hltanalysisReco*
-			    process.hltobject *
-                            process.hiEvtAnalyzer *
-                            process.jetSequences +
-                            process.egmGsfElectronIDSequence + #Should be added in the path for VID module
-                            process.ggHiNtuplizer +
-                            process.ggHiNtuplizerGED +
-                            process.pfcandAnalyzer +
-                            process.HiForest +
-                            process.trackSequencesPP
-                            )
+process.ana_step = cms.Path(
+    process.hltanalysisReco *
+    process.hltobject *
+    process.hiEvtAnalyzer *
+    process.jetSequences +
+    # Should be added in the path for VID module
+    # process.egmGsfElectronIDSequence +
+    process.ggHiNtuplizer +
+    process.ggHiNtuplizerGED +
+    process.pfcandAnalyzer +
+    process.HiForest +
+    process.trackSequencesPP
+)
 
 #####################################################################################
 
@@ -194,7 +190,7 @@ process.ana_step = cms.Path(process.hltanalysisReco*
 #########################
 
 process.load('HeavyIonsAnalysis.JetAnalysis.EventSelection_cff')
-process.pHBHENoiseFilterResultProducer = cms.Path( process.HBHENoiseFilterResultProducer )
+process.pHBHENoiseFilterResultProducer = cms.Path(process.HBHENoiseFilterResultProducer)
 process.HBHENoiseFilterResult = cms.Path(process.fHBHENoiseFilterResult)
 process.HBHENoiseFilterResultRun1 = cms.Path(process.fHBHENoiseFilterResultRun1)
 process.HBHENoiseFilterResultRun2Loose = cms.Path(process.fHBHENoiseFilterResultRun2Loose)
@@ -208,17 +204,16 @@ process.PAprimaryVertexFilter = cms.EDFilter("VertexSelector",
 )
 
 process.NoScraping = cms.EDFilter("FilterOutScraping",
- applyfilter = cms.untracked.bool(True),
- debugOn = cms.untracked.bool(False),
- numtrack = cms.untracked.uint32(10),
- thresh = cms.untracked.double(0.25)
+    applyfilter = cms.untracked.bool(True),
+    debugOn = cms.untracked.bool(False),
+    numtrack = cms.untracked.uint32(10),
+    thresh = cms.untracked.double(0.25)
 )
 
 process.pPAprimaryVertexFilter = cms.Path(process.PAprimaryVertexFilter)
 process.pBeamScrapingFilter=cms.Path(process.NoScraping)
 
 process.load("HeavyIonsAnalysis.VertexAnalysis.PAPileUpVertexFilter_cff")
-
 process.pVertexFilterCutG = cms.Path(process.pileupVertexFilterCutG)
 process.pVertexFilterCutGloose = cms.Path(process.pileupVertexFilterCutGloose)
 process.pVertexFilterCutGtight = cms.Path(process.pileupVertexFilterCutGtight)
