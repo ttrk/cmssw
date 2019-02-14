@@ -2,12 +2,12 @@ import FWCore.ParameterSet.Config as cms
 
 ### PP RECO does not include R=3 or R=5 jets.
 ### re-RECO is only possible for PF, RECO is missing calotowers
-from RecoJets.JetProducers.ak5PFJets_cfi import ak5PFJets
-ak5PFJets.doAreaFastjet = True
-ak3PFJets = ak5PFJets.clone(rParam = 0.3)
-from RecoJets.JetProducers.ak5GenJets_cfi import ak5GenJets
-ak3GenJets = ak5GenJets.clone(rParam = 0.3)
-ak4GenJets = ak5GenJets.clone(rParam = 0.4)
+from RecoJets.JetProducers.ak4PFJets_cfi import ak4PFJets
+ak3PFJets = ak4PFJets.clone(rParam = 0.3)
+ak5PFJets = ak4PFJets.clone(rParam = 0.5)
+from RecoJets.JetProducers.ak4GenJets_cfi import ak4GenJets
+ak3GenJets = ak4GenJets.clone(rParam = 0.3)
+ak5GenJets = ak4GenJets.clone(rParam = 0.5)
 
 #SoftDrop PF jets
 from RecoJets.JetProducers.PFJetParameters_cfi import *
