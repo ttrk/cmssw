@@ -1,4 +1,5 @@
 #include "CommonTools/UtilAlgos/interface/TFileService.h"
+#include "DataFormats/Common/interface/Handle.h"
 #include "DataFormats/DetId/interface/DetId.h"
 #include "DataFormats/EcalDetId/interface/EBDetId.h"
 #include "DataFormats/EcalDetId/interface/EEDetId.h"
@@ -6,6 +7,7 @@
 #include "DataFormats/Math/interface/deltaR.h"
 #include "DataFormats/MuonReco/interface/MuonSelectors.h"
 #include "EgammaAnalysis/ElectronTools/interface/SuperClusterHelper.h"
+#include "FWCore/Framework/interface/ESHandle.h"
 #include "FWCore/ServiceRegistry/interface/Service.h"
 #include "Geometry/Records/interface/CaloGeometryRecord.h"
 
@@ -1011,24 +1013,12 @@ void ggHiNtuplizer::fillElectrons(const edm::Event& e, const edm::EventSetup& es
       eleSeedCryIphi_ .push_back(0);
     }
 
+    bool passConvVeto = !ConversionTools::hasMatchedConversion(
+        *ele, conversions, theBeamSpot->position());
+    elepassConversionVeto_.push_back( (int) passConvVeto );
+    eleEffAreaTimesRho_.push_back(area * rho);
+
     if (doVID_) {
-      eleEffAreaTimesRho_.push_back(area * rho);
-
-      bool passConvVeto = !ConversionTools::hasMatchedConversion(*ele,
-          conversions,
-          theBeamSpot->position());
-      elepassConversionVeto_.push_back( (int) passConvVeto );
-
-      // parameters of the very first PFCluster
-      // reco::CaloCluster_iterator bc = ele->superCluster()->clustersBegin();
-      // if (bc != ele->superCluster()->clustersEnd()) {
-      //    eleBC2E_  .push_back((*bc)->energy());
-      //    eleBC2Eta_.push_back((*bc)->eta());
-      // } else {
-      //    eleBC2E_  .push_back(-99);
-      //    eleBC2Eta_.push_back(-99);
-      // }
-
       const edm::Ptr<reco::GsfElectron> elePtr(gsfElectronsHandle, ele - gsfElectronsHandle->begin()); //value map is keyed of edm::Ptrs so we need to make one
       bool passVetoID   = false;
       bool passLooseID  = false;
