@@ -11,6 +11,7 @@ ggHiNtuplizer = cms.EDAnalyzer(
     runOnParticleGun   = cms.bool(False),
     useValMapIso       = cms.bool(True),
     doElectronVID      = cms.bool(False),
+    doEleERegression   = cms.bool(False),
     doRecHitsEB        = cms.bool(False),
     doRecHitsEE        = cms.bool(False),
     recHitsEB          = cms.untracked.InputTag("ecalRecHit","EcalRecHitsEB"),
