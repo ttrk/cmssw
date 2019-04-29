@@ -26,13 +26,13 @@ process.HiForest.HiForestVersion = cms.string(version)
 
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
-	'/store/data/Run2017G/DoubleMuon/AOD/17Nov2017-v1/90001/F85E677C-D92E-E811-8DC4-C4346BC85718.root'
+        'file:/afs/cern.ch/work/r/rbi/public/forest/HighEGJet_Run2017G_17Nov2017-v2_AOD_large.root'
     )
 )
 
 # Number of events we want to process, -1 = all events
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(1))
+    input = cms.untracked.int32(8))
 
 #####################################################################################
 # Load Global Tag, Geometry, etc.
@@ -226,14 +226,10 @@ process.pAna = cms.EndPath(process.skimanalysis)
 
 # Customization
 
-process.ak3PFJetAnalyzer.trackSelection = process.ak4PFSecondaryVertexTagInfos.trackSelection
-process.ak3PFJetAnalyzer.trackPairV0Filter = process.ak4PFSecondaryVertexTagInfos.vertexCuts.v0Filter
-
-process.ak4PFJetAnalyzer.trackSelection = process.ak4PFSecondaryVertexTagInfos.trackSelection
-process.ak4PFJetAnalyzer.trackPairV0Filter = process.ak4PFSecondaryVertexTagInfos.vertexCuts.v0Filter
-
-process.ak5PFJetAnalyzer.trackSelection = process.ak4PFSecondaryVertexTagInfos.trackSelection
-process.ak5PFJetAnalyzer.trackPairV0Filter = process.ak4PFSecondaryVertexTagInfos.vertexCuts.v0Filter
-
-process.ak4CaloJetAnalyzer.trackSelection = process.ak4PFSecondaryVertexTagInfos.trackSelection
-process.ak4CaloJetAnalyzer.trackPairV0Filter = process.ak4PFSecondaryVertexTagInfos.vertexCuts.v0Filter
+for analyzer in [process.ak3PFJetAnalyzer,
+                 process.ak4PFJetAnalyzer,
+                 process.ak5PFJetAnalyzer,
+                 process.ak4CaloJetAnalyzer,
+                 ]:
+    analyzer.trackSelection = process.ak4PFSecondaryVertexTagInfos.trackSelection
+    analyzer.trackPairV0Filter = process.ak4PFSecondaryVertexTagInfos.vertexCuts.v0Filter

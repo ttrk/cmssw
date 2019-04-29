@@ -26,13 +26,13 @@ process.HiForest.HiForestVersion = cms.string(version)
 
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
-	'/store/himc/RunIIpp5Spring18DR/DYJetsToLL_MLL-50_TuneCP5_5020GeV-amcatnloFXFX-pythia8/AODSIM/94X_mc2017_realistic_forppRef5TeV-v2/40000/F89CBBA1-079E-E811-9661-7CD30AD0936A.root'
+	'file:/afs/cern.ch/work/r/rbi/public/forest/RunIIpp5Spring18DR_DYJetsToLL_MLL-50_TuneCP5_5020GeV-amcatnloFXFX-pythia8_AODSIM.root'
     )
 )
 
 # Number of events we want to process, -1 = all events
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(1))
+    input = cms.untracked.int32(8))
 
 #####################################################################################
 # Load Global Tag, Geometry, etc.
