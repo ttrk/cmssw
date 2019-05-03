@@ -94,7 +94,7 @@ double pfIsoCalculator::getPfIsoSubUE(const reco::Photon& photon, int pfId,
     double angTmp = std::acos(jWidth / r1);
     double lenTmp = std::sqrt(r1*r1 - jWidth*jWidth) * 2;
     double areaTwoTriangles = lenTmp * jWidth;
-    double areaTwoArcs = 2 * (M_PI - 2*angTmp) * M_PI * r1 * r1;
+    double areaTwoArcs = (M_PI - 2*angTmp) * r1 * r1;
     areaCone -= (areaTwoTriangles + areaTwoArcs);
   }
 
@@ -105,7 +105,7 @@ double pfIsoCalculator::getPfIsoSubUE(const reco::Photon& photon, int pfId,
       double angTmp = std::acos(jWidth / r2);
       double lenTmp = std::sqrt(r2*r2 - jWidth*jWidth) * 2;
       double areaTwoTriangles = lenTmp * jWidth;
-      double areaTwoArcs = 2 * (M_PI - 2*angTmp) * M_PI * r2 * r2;
+      double areaTwoArcs = (M_PI - 2*angTmp) * r2 * r2;
       areaInnerCone -= (areaTwoTriangles + areaTwoArcs);
     }
   }
