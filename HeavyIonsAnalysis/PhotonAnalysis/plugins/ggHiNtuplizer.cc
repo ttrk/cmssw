@@ -1151,19 +1151,19 @@ void ggHiNtuplizer::fillElectrons(const edm::Event& e, const edm::EventSetup& es
     // calculation on the fly
     pfIsoCalculator pfIsoCal(e, pfCollection_, pv.position());
     if (std::abs(ele->superCluster()->eta()) > 1.566) {
-      elePFChIso03_          .push_back(pfIsoCal.getPfIso(*ele, 1, 0.3, 0.015, 0.));
-      elePFChIso04_          .push_back(pfIsoCal.getPfIso(*ele, 1, 0.4, 0.015, 0.));
-      elePFPhoIso03_         .push_back(pfIsoCal.getPfIso(*ele, 4, 0.3, 0.08, 0.));
-      elePFPhoIso04_         .push_back(pfIsoCal.getPfIso(*ele, 4, 0.4, 0.08, 0.));
+      elePFChIso03_          .push_back(pfIsoCal.getPfIso(*ele, reco::PFCandidate::h,     0.3, 0.015, 0.));
+      elePFChIso04_          .push_back(pfIsoCal.getPfIso(*ele, reco::PFCandidate::h,     0.4, 0.015, 0.));
+      elePFPhoIso03_         .push_back(pfIsoCal.getPfIso(*ele, reco::PFCandidate::gamma, 0.3, 0.08, 0.));
+      elePFPhoIso04_         .push_back(pfIsoCal.getPfIso(*ele, reco::PFCandidate::gamma, 0.4, 0.08, 0.));
     } else {
-      elePFChIso03_          .push_back(pfIsoCal.getPfIso(*ele, 1, 0.3, 0.0, 0.));
-      elePFChIso04_          .push_back(pfIsoCal.getPfIso(*ele, 1, 0.4, 0.0, 0.));
-      elePFPhoIso03_         .push_back(pfIsoCal.getPfIso(*ele, 4, 0.3, 0.0, 0.));
-      elePFPhoIso04_         .push_back(pfIsoCal.getPfIso(*ele, 4, 0.4, 0.0, 0.));
+      elePFChIso03_          .push_back(pfIsoCal.getPfIso(*ele, reco::PFCandidate::h,     0.3, 0.0, 0.));
+      elePFChIso04_          .push_back(pfIsoCal.getPfIso(*ele, reco::PFCandidate::h,     0.4, 0.0, 0.));
+      elePFPhoIso03_         .push_back(pfIsoCal.getPfIso(*ele, reco::PFCandidate::gamma, 0.3, 0.0, 0.));
+      elePFPhoIso04_         .push_back(pfIsoCal.getPfIso(*ele, reco::PFCandidate::gamma, 0.4, 0.0, 0.));
     }
 
-    elePFNeuIso03_         .push_back(pfIsoCal.getPfIso(*ele, 5, 0.3, 0., 0.));
-    elePFNeuIso04_         .push_back(pfIsoCal.getPfIso(*ele, 5, 0.4, 0., 0.));
+    elePFNeuIso03_         .push_back(pfIsoCal.getPfIso(*ele, reco::PFCandidate::h0, 0.3, 0., 0.));
+    elePFNeuIso04_         .push_back(pfIsoCal.getPfIso(*ele, reco::PFCandidate::h0, 0.4, 0., 0.));
 
     eleR9_               .push_back(ele->r9());
     eleE3x3_             .push_back(ele->r9()*ele->superCluster()->energy());
@@ -1514,41 +1514,41 @@ void ggHiNtuplizer::fillPhotons(const edm::Event& e, const edm::EventSetup& es, 
     if (doPfIso_) {
       pfIsoCalculator pfIso(e, pfCollection_, pv.position());
       // particle flow isolation
-      pfcIso1.push_back( pfIso.getPfIso(*pho, 1, 0.1, 0.02, 0.0, 0 ));
-      pfcIso2.push_back( pfIso.getPfIso(*pho, 1, 0.2, 0.02, 0.0, 0 ));
-      pfcIso3.push_back( pfIso.getPfIso(*pho, 1, 0.3, 0.02, 0.0, 0 ));
-      pfcIso4.push_back( pfIso.getPfIso(*pho, 1, 0.4, 0.02, 0.0, 0 ));
-      pfcIso5.push_back( pfIso.getPfIso(*pho, 1, 0.5, 0.02, 0.0, 0 ));
+      pfcIso1.push_back( pfIso.getPfIso(*pho, reco::PFCandidate::h, 0.1, 0.02, 0.0, 0 ));
+      pfcIso2.push_back( pfIso.getPfIso(*pho, reco::PFCandidate::h, 0.2, 0.02, 0.0, 0 ));
+      pfcIso3.push_back( pfIso.getPfIso(*pho, reco::PFCandidate::h, 0.3, 0.02, 0.0, 0 ));
+      pfcIso4.push_back( pfIso.getPfIso(*pho, reco::PFCandidate::h, 0.4, 0.02, 0.0, 0 ));
+      pfcIso5.push_back( pfIso.getPfIso(*pho, reco::PFCandidate::h, 0.5, 0.02, 0.0, 0 ));
 
-      pfnIso1.push_back( pfIso.getPfIso(*pho, 5, 0.1, 0.0, 0.0, 0 ));
-      pfnIso2.push_back( pfIso.getPfIso(*pho, 5, 0.2, 0.0, 0.0, 0 ));
-      pfnIso3.push_back( pfIso.getPfIso(*pho, 5, 0.3, 0.0, 0.0, 0 ));
-      pfnIso4.push_back( pfIso.getPfIso(*pho, 5, 0.4, 0.0, 0.0, 0 ));
-      pfnIso5.push_back( pfIso.getPfIso(*pho, 5, 0.5, 0.0, 0.0, 0 ));
+      pfnIso1.push_back( pfIso.getPfIso(*pho, reco::PFCandidate::h0, 0.1, 0.0, 0.0, 0 ));
+      pfnIso2.push_back( pfIso.getPfIso(*pho, reco::PFCandidate::h0, 0.2, 0.0, 0.0, 0 ));
+      pfnIso3.push_back( pfIso.getPfIso(*pho, reco::PFCandidate::h0, 0.3, 0.0, 0.0, 0 ));
+      pfnIso4.push_back( pfIso.getPfIso(*pho, reco::PFCandidate::h0, 0.4, 0.0, 0.0, 0 ));
+      pfnIso5.push_back( pfIso.getPfIso(*pho, reco::PFCandidate::h0, 0.5, 0.0, 0.0, 0 ));
 
-      pfpIso1.push_back( pfIso.getPfIso(*pho, 4, 0.1, 0.0, 0.0, 0.015 ));
-      pfpIso2.push_back( pfIso.getPfIso(*pho, 4, 0.2, 0.0, 0.0, 0.015 ));
-      pfpIso3.push_back( pfIso.getPfIso(*pho, 4, 0.3, 0.0, 0.0, 0.015 ));
-      pfpIso4.push_back( pfIso.getPfIso(*pho, 4, 0.4, 0.0, 0.0, 0.015 ));
-      pfpIso5.push_back( pfIso.getPfIso(*pho, 4, 0.5, 0.0, 0.0, 0.015 ));
+      pfpIso1.push_back( pfIso.getPfIso(*pho, reco::PFCandidate::gamma, 0.1, 0.0, 0.0, 0.015 ));
+      pfpIso2.push_back( pfIso.getPfIso(*pho, reco::PFCandidate::gamma, 0.2, 0.0, 0.0, 0.015 ));
+      pfpIso3.push_back( pfIso.getPfIso(*pho, reco::PFCandidate::gamma, 0.3, 0.0, 0.0, 0.015 ));
+      pfpIso4.push_back( pfIso.getPfIso(*pho, reco::PFCandidate::gamma, 0.4, 0.0, 0.0, 0.015 ));
+      pfpIso5.push_back( pfIso.getPfIso(*pho, reco::PFCandidate::gamma, 0.5, 0.0, 0.0, 0.015 ));
 
-      pfcIso1subUE.push_back( pfIso.getPfIsoSubUE(*pho, 1, 0.1, 0.02, 0.0, 0 ));
-      pfcIso2subUE.push_back( pfIso.getPfIsoSubUE(*pho, 1, 0.2, 0.02, 0.0, 0 ));
-      pfcIso3subUE.push_back( pfIso.getPfIsoSubUE(*pho, 1, 0.3, 0.02, 0.0, 0 ));
-      pfcIso4subUE.push_back( pfIso.getPfIsoSubUE(*pho, 1, 0.4, 0.02, 0.0, 0 ));
-      pfcIso5subUE.push_back( pfIso.getPfIsoSubUE(*pho, 1, 0.5, 0.02, 0.0, 0 ));
+      pfcIso1subUE.push_back( pfIso.getPfIsoSubUE(*pho, reco::PFCandidate::h, 0.1, 0.02, 0.0, 0 ));
+      pfcIso2subUE.push_back( pfIso.getPfIsoSubUE(*pho, reco::PFCandidate::h, 0.2, 0.02, 0.0, 0 ));
+      pfcIso3subUE.push_back( pfIso.getPfIsoSubUE(*pho, reco::PFCandidate::h, 0.3, 0.02, 0.0, 0 ));
+      pfcIso4subUE.push_back( pfIso.getPfIsoSubUE(*pho, reco::PFCandidate::h, 0.4, 0.02, 0.0, 0 ));
+      pfcIso5subUE.push_back( pfIso.getPfIsoSubUE(*pho, reco::PFCandidate::h, 0.5, 0.02, 0.0, 0 ));
 
-      pfnIso1subUE.push_back( pfIso.getPfIsoSubUE(*pho, 5, 0.1, 0.0, 0.0, 0 ));
-      pfnIso2subUE.push_back( pfIso.getPfIsoSubUE(*pho, 5, 0.2, 0.0, 0.0, 0 ));
-      pfnIso3subUE.push_back( pfIso.getPfIsoSubUE(*pho, 5, 0.3, 0.0, 0.0, 0 ));
-      pfnIso4subUE.push_back( pfIso.getPfIsoSubUE(*pho, 5, 0.4, 0.0, 0.0, 0 ));
-      pfnIso5subUE.push_back( pfIso.getPfIsoSubUE(*pho, 5, 0.5, 0.0, 0.0, 0 ));
+      pfnIso1subUE.push_back( pfIso.getPfIsoSubUE(*pho, reco::PFCandidate::h0, 0.1, 0.0, 0.0, 0 ));
+      pfnIso2subUE.push_back( pfIso.getPfIsoSubUE(*pho, reco::PFCandidate::h0, 0.2, 0.0, 0.0, 0 ));
+      pfnIso3subUE.push_back( pfIso.getPfIsoSubUE(*pho, reco::PFCandidate::h0, 0.3, 0.0, 0.0, 0 ));
+      pfnIso4subUE.push_back( pfIso.getPfIsoSubUE(*pho, reco::PFCandidate::h0, 0.4, 0.0, 0.0, 0 ));
+      pfnIso5subUE.push_back( pfIso.getPfIsoSubUE(*pho, reco::PFCandidate::h0, 0.5, 0.0, 0.0, 0 ));
 
-      pfpIso1subUE.push_back( pfIso.getPfIsoSubUE(*pho, 4, 0.1, 0.0, 0.0, 0.015 ));
-      pfpIso2subUE.push_back( pfIso.getPfIsoSubUE(*pho, 4, 0.2, 0.0, 0.0, 0.015 ));
-      pfpIso3subUE.push_back( pfIso.getPfIsoSubUE(*pho, 4, 0.3, 0.0, 0.0, 0.015 ));
-      pfpIso4subUE.push_back( pfIso.getPfIsoSubUE(*pho, 4, 0.4, 0.0, 0.0, 0.015 ));
-      pfpIso5subUE.push_back( pfIso.getPfIsoSubUE(*pho, 4, 0.5, 0.0, 0.0, 0.015 ));
+      pfpIso1subUE.push_back( pfIso.getPfIsoSubUE(*pho, reco::PFCandidate::gamma, 0.1, 0.0, 0.0, 0.015 ));
+      pfpIso2subUE.push_back( pfIso.getPfIsoSubUE(*pho, reco::PFCandidate::gamma, 0.2, 0.0, 0.0, 0.015 ));
+      pfpIso3subUE.push_back( pfIso.getPfIsoSubUE(*pho, reco::PFCandidate::gamma, 0.3, 0.0, 0.0, 0.015 ));
+      pfpIso4subUE.push_back( pfIso.getPfIsoSubUE(*pho, reco::PFCandidate::gamma, 0.4, 0.0, 0.0, 0.015 ));
+      pfpIso5subUE.push_back( pfIso.getPfIsoSubUE(*pho, reco::PFCandidate::gamma, 0.5, 0.0, 0.0, 0.015 ));
     }
 
     //////////////////////////////////// MC matching ////////////////////////////////////
