@@ -44,38 +44,10 @@ double pfIsoCalculator::getPfIso(const reco::Photon& photon, int pfId,
     if (removeFootprint) {
       // remove the photon itself and associated PF candidates
       if ( pf->superClusterRef() == photon.superCluster() ) {
-
-        /*
-        std::cout << "----- PF cand has same SC ref : indexPF = " << (pf - candidatesView->begin()) << std::endl;
-        std::cout << "pfPt = " << pfPt << std::endl;
-        std::cout << "pfEta = " << pfEta << std::endl;
-        std::cout << "pfPhi = " << pfPhi << std::endl;
-        std::cout << "pf.particleId() = " << pf->particleId() << std::endl;
-        std::cout << "photonEt = " << photon.et() << std::endl;
-        std::cout << "photonEta = " << photonEta << std::endl;
-        std::cout << "photonPhi = " << photonPhi << std::endl;
-        std::cout << "dR = " << std::sqrt(dR2) << std::endl;
-        std::cout << "pfPt/photonEt = " << pfPt / photon.et() << std::endl;
-        std::cout << "pfPt/photonEt SC raw Et = " << pfPt / (photon.superCluster()->rawEnergy() / std::cosh(photon.superCluster()->eta())) << std::endl;
-        */
         continue;
       }
       edm::Ptr<reco::Candidate> candPtr(candidatesView, pf - candidatesView->begin());
       if ( isInFootprint(particlesInIsoMap, candPtr) ) {
-
-        /*
-        std::cout << "----- PF cand is footprint : indexPF = " << (pf - candidatesView->begin()) << std::endl;
-        std::cout << "pfPt = " << pfPt << std::endl;
-        std::cout << "pfEta = " << pfEta << std::endl;
-        std::cout << "pfPhi = " << pfPhi << std::endl;
-        std::cout << "pf.particleId() = " << pf->particleId() << std::endl;
-        std::cout << "photonEt = " << photon.et() << std::endl;
-        std::cout << "photonEta = " << photonEta << std::endl;
-        std::cout << "photonPhi = " << photonPhi << std::endl;
-        std::cout << "dR = " << std::sqrt(dR2) << std::endl;
-        std::cout << "pfPt/photonEt = " << pfPt / photon.et() << std::endl;
-        std::cout << "pfPt/photonEt SC raw Et = " << pfPt / (photon.superCluster()->rawEnergy() / std::cosh(photon.superCluster()->eta())) << std::endl;
-        */
         continue;
       }
     }
