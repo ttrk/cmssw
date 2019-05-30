@@ -15,8 +15,11 @@ class pfIsoCalculator
   public:
     pfIsoCalculator(const edm::Event &iEvent, const edm::EDGetTokenT<edm::View<reco::PFCandidate> > pfCandidates, const math::XYZPoint& pv);
 
-    double getPfIso(const reco::Photon& photon,  int pfId, double r1=0.4, double r2=0.00, double threshold=0, double jWidth=0.0);
-    double getPfIsoSubUE(const reco::Photon& photon,  int pfId, double r1=0.4, double r2=0.00, double threshold=0, double jWidth=0.0);
+    template <class T>
+    bool isInFootprint(const T& footprint, const edm::Ptr<reco::Candidate>& candidate);
+
+    double getPfIso(const reco::Photon& photon, int pfId, double r1=0.4, double r2=0.00, double threshold=0, double jWidth=0.0, bool removeFootprint = false, std::vector<reco::PFCandidateRef> particlesInIsoMap = {});
+    double getPfIsoSubUE(const reco::Photon& photon, int pfId, double r1=0.4, double r2=0.00, double threshold=0, double jWidth=0.0, bool removeFootprint = false, std::vector<reco::PFCandidateRef> particlesInIsoMap = {});
 
     double getPfIso(const reco::GsfElectron& ele, int pfId, double r1=0.4, double r2=0.00, double threshold=0);
 

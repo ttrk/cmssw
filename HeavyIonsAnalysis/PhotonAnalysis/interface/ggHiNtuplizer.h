@@ -57,6 +57,7 @@ class ggHiNtuplizer : public edm::EDAnalyzer {
    bool runOnParticleGun_;
    bool useValMapIso_;
    bool doPfIso_;
+   bool removePhotonPfIsoFootprint_;
    bool doEReg_;
    bool doEffectiveAreas_;
    bool doVID_;
@@ -79,6 +80,8 @@ class ggHiNtuplizer : public edm::EDAnalyzer {
    edm::EDGetTokenT<reco::BeamSpot> beamSpotToken_;
    edm::EDGetTokenT<reco::ConversionCollection> conversionsToken_;
    edm::EDGetTokenT<edm::View<reco::PFCandidate> >    pfCollection_;
+
+   edm::EDGetToken particleBasedIsolationPhoton_;
 
    edm::EDGetTokenT<EcalRecHitCollection> recHitsEB_;
    edm::EDGetTokenT<EcalRecHitCollection> recHitsEE_;
