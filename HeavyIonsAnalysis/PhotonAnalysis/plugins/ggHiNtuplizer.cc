@@ -1544,11 +1544,11 @@ void ggHiNtuplizer::fillPhotons(const edm::Event& e, const edm::EventSetup& es, 
       pfnIso4.push_back( pfIso.getPfIso(*pho, reco::PFCandidate::h0, 0.4, 0.0, 0.0, 0, true, particlesInIsoMap));
       pfnIso5.push_back( pfIso.getPfIso(*pho, reco::PFCandidate::h0, 0.5, 0.0, 0.0, 0, true, particlesInIsoMap));
 
-      pfpIso1.push_back( pfIso.getPfIso(*pho, reco::PFCandidate::gamma, 0.1, 0.0, 0.0, 0.015, true, particlesInIsoMap));
-      pfpIso2.push_back( pfIso.getPfIso(*pho, reco::PFCandidate::gamma, 0.2, 0.0, 0.0, 0.015, true, particlesInIsoMap));
-      pfpIso3.push_back( pfIso.getPfIso(*pho, reco::PFCandidate::gamma, 0.3, 0.0, 0.0, 0.015, true, particlesInIsoMap));
-      pfpIso4.push_back( pfIso.getPfIso(*pho, reco::PFCandidate::gamma, 0.4, 0.0, 0.0, 0.015, true, particlesInIsoMap));
-      pfpIso5.push_back( pfIso.getPfIso(*pho, reco::PFCandidate::gamma, 0.5, 0.0, 0.0, 0.015, true, particlesInIsoMap));
+      pfpIso1.push_back( pfIso.getPfIso(*pho, reco::PFCandidate::gamma, 0.1, 0.0, 0.0, 0, true, particlesInIsoMap));
+      pfpIso2.push_back( pfIso.getPfIso(*pho, reco::PFCandidate::gamma, 0.2, 0.0, 0.0, 0, true, particlesInIsoMap));
+      pfpIso3.push_back( pfIso.getPfIso(*pho, reco::PFCandidate::gamma, 0.3, 0.0, 0.0, 0, true, particlesInIsoMap));
+      pfpIso4.push_back( pfIso.getPfIso(*pho, reco::PFCandidate::gamma, 0.4, 0.0, 0.0, 0, true, particlesInIsoMap));
+      pfpIso5.push_back( pfIso.getPfIso(*pho, reco::PFCandidate::gamma, 0.5, 0.0, 0.0, 0, true, particlesInIsoMap));
 
       pfcIso1subUE.push_back( pfIso.getPfIsoSubUE(*pho, reco::PFCandidate::h, 0.1, 0.02, 0.0, 0, true, particlesInIsoMap));
       pfcIso2subUE.push_back( pfIso.getPfIsoSubUE(*pho, reco::PFCandidate::h, 0.2, 0.02, 0.0, 0, true, particlesInIsoMap));
@@ -1562,11 +1562,11 @@ void ggHiNtuplizer::fillPhotons(const edm::Event& e, const edm::EventSetup& es, 
       pfnIso4subUE.push_back( pfIso.getPfIsoSubUE(*pho, reco::PFCandidate::h0, 0.4, 0.0, 0.0, 0, true, particlesInIsoMap));
       pfnIso5subUE.push_back( pfIso.getPfIsoSubUE(*pho, reco::PFCandidate::h0, 0.5, 0.0, 0.0, 0, true, particlesInIsoMap));
 
-      pfpIso1subUE.push_back( pfIso.getPfIsoSubUE(*pho, reco::PFCandidate::gamma, 0.1, 0.0, 0.0, 0.015, true, particlesInIsoMap));
-      pfpIso2subUE.push_back( pfIso.getPfIsoSubUE(*pho, reco::PFCandidate::gamma, 0.2, 0.0, 0.0, 0.015, true, particlesInIsoMap));
-      pfpIso3subUE.push_back( pfIso.getPfIsoSubUE(*pho, reco::PFCandidate::gamma, 0.3, 0.0, 0.0, 0.015, true, particlesInIsoMap));
-      pfpIso4subUE.push_back( pfIso.getPfIsoSubUE(*pho, reco::PFCandidate::gamma, 0.4, 0.0, 0.0, 0.015, true, particlesInIsoMap));
-      pfpIso5subUE.push_back( pfIso.getPfIsoSubUE(*pho, reco::PFCandidate::gamma, 0.5, 0.0, 0.0, 0.015, true, particlesInIsoMap));
+      pfpIso1subUE.push_back( pfIso.getPfIsoSubUE(*pho, reco::PFCandidate::gamma, 0.1, 0.0, 0.0, 0, true, particlesInIsoMap));
+      pfpIso2subUE.push_back( pfIso.getPfIsoSubUE(*pho, reco::PFCandidate::gamma, 0.2, 0.0, 0.0, 0, true, particlesInIsoMap));
+      pfpIso3subUE.push_back( pfIso.getPfIsoSubUE(*pho, reco::PFCandidate::gamma, 0.3, 0.0, 0.0, 0, true, particlesInIsoMap));
+      pfpIso4subUE.push_back( pfIso.getPfIsoSubUE(*pho, reco::PFCandidate::gamma, 0.4, 0.0, 0.0, 0, true, particlesInIsoMap));
+      pfpIso5subUE.push_back( pfIso.getPfIsoSubUE(*pho, reco::PFCandidate::gamma, 0.5, 0.0, 0.0, 0, true, particlesInIsoMap));
     }
 
     //////////////////////////////////// MC matching ////////////////////////////////////
