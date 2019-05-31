@@ -34,4 +34,6 @@ ggHiNtuplizer = cms.EDAnalyzer(
     effAreasConfigFile = effAreasConfigFile25nsV2,
     doPfIso            = cms.bool(True),
     particleFlowCollection = cms.InputTag("particleFlowTmp"),
+    removePhotonPfIsoFootprint = cms.bool(False),
+    particleBasedIsolationPhoton = cms.InputTag("DUMMY"),
 )
