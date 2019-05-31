@@ -25,11 +25,15 @@ bool pfIsoCalculator::isInFootprint(const T& footprint,
 
 double pfIsoCalculator::getPfIso(const reco::Photon& photon, int pfId,
                                  double r1, double r2, double threshold,
-                                 double jWidth, bool removeFootprint, std::vector<reco::PFCandidateRef> particlesInIsoMap)
+                                 double jWidth, int footprintRemoval, std::vector<reco::PFCandidateRef> particlesInIsoMap)
 {
   double photonEta = photon.eta();
   double photonPhi = photon.phi();
   double totalEt = 0;
+
+  if (footprintRemoval == pfIsoCalculator::removeSCenergy) {
+    totalEt -= (photon.superCluster()->rawEnergy() / std::cosh(photon.superCluster()->eta()));
+  }
 
   for (auto pf = candidatesView->begin(); pf != candidatesView->end(); ++pf) {
     if ( pf->particleId() != pfId )   continue;
@@ -41,7 +45,7 @@ double pfIsoCalculator::getPfIso(const reco::Photon& photon, int pfId,
     double dR2 = dEta*dEta + dPhi*dPhi;
     double pfPt = pf->pt();
 
-    if (removeFootprint) {
+    if (footprintRemoval == pfIsoCalculator::removePFcand) {
       // remove the photon itself and associated PF candidates
       if ( pf->superClusterRef() == photon.superCluster() ) {
         continue;
@@ -72,11 +76,15 @@ double pfIsoCalculator::getPfIso(const reco::Photon& photon, int pfId,
 
 double pfIsoCalculator::getPfIsoSubUE(const reco::Photon& photon, int pfId,
                                       double r1, double r2, double threshold,
-                                      double jWidth, bool removeFootprint, std::vector<reco::PFCandidateRef> particlesInIsoMap)
+                                      double jWidth, int footprintRemoval, std::vector<reco::PFCandidateRef> particlesInIsoMap)
 {
   double photonEta = photon.eta();
   double photonPhi = photon.phi();
   double totalEt = 0;
+
+  if (footprintRemoval == pfIsoCalculator::removeSCenergy) {
+    totalEt -= (photon.superCluster()->rawEnergy() / std::cosh(photon.superCluster()->eta()));
+  }
 
   for (auto pf = candidatesView->begin(); pf != candidatesView->end(); ++pf) {
     if ( pf->particleId() != pfId )   continue;
@@ -87,7 +95,7 @@ double pfIsoCalculator::getPfIsoSubUE(const reco::Photon& photon, int pfId,
     if (dEta > r1) continue;
     if (dEta < jWidth)  continue;
 
-    if (removeFootprint) {
+    if (footprintRemoval == pfIsoCalculator::removePFcand) {
       // remove the photon itself and associated PF candidates
       if ( pf->superClusterRef() == photon.superCluster() ) {
         continue;
@@ -140,7 +148,7 @@ double pfIsoCalculator::getPfIsoSubUE(const reco::Photon& photon, int pfId,
   areaStrip -= areaInnerCone;
   areaCone -= areaInnerCone;
 
-  double subEt = getPfIso(photon, pfId, r1, r2, threshold, jWidth, removeFootprint, particlesInIsoMap) - totalEt * (areaCone / areaStrip);
+  double subEt = getPfIso(photon, pfId, r1, r2, threshold, jWidth, footprintRemoval, particlesInIsoMap) - totalEt * (areaCone / areaStrip);
   return subEt;
 }
 
