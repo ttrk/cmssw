@@ -25,7 +25,7 @@ bool pfIsoCalculator::isInFootprint(const T& footprint,
 
 double pfIsoCalculator::getPfIso(const reco::Photon& photon, int pfId,
                                  double r1, double r2, double threshold,
-                                 double jWidth, int footprintRemoval, std::vector<reco::PFCandidateRef> particlesInIsoMap)
+                                 double jWidth, int footprintRemoval, const std::vector<reco::PFCandidateRef>& particlesInIsoMap)
 {
   double photonEta = photon.eta();
   double photonPhi = photon.phi();
@@ -76,7 +76,7 @@ double pfIsoCalculator::getPfIso(const reco::Photon& photon, int pfId,
 
 double pfIsoCalculator::getPfIsoSubUE(const reco::Photon& photon, int pfId,
                                       double r1, double r2, double threshold,
-                                      double jWidth, int footprintRemoval, std::vector<reco::PFCandidateRef> particlesInIsoMap)
+                                      double jWidth, int footprintRemoval, const std::vector<reco::PFCandidateRef>& particlesInIsoMap)
 {
   double photonEta = photon.eta();
   double photonPhi = photon.phi();

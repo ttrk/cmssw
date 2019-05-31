@@ -18,8 +18,8 @@ class pfIsoCalculator
     template <class T>
     bool isInFootprint(const T& footprint, const edm::Ptr<reco::Candidate>& candidate);
 
-    double getPfIso(const reco::Photon& photon, int pfId, double r1=0.4, double r2=0.00, double threshold=0, double jWidth=0.0, int footprintRemoval = 0, std::vector<reco::PFCandidateRef> particlesInIsoMap = {});
-    double getPfIsoSubUE(const reco::Photon& photon, int pfId, double r1=0.4, double r2=0.00, double threshold=0, double jWidth=0.0, int footprintRemoval = 0, std::vector<reco::PFCandidateRef> particlesInIsoMap = {});
+    double getPfIso(const reco::Photon& photon, int pfId, double r1=0.4, double r2=0.00, double threshold=0, double jWidth=0.0, int footprintRemoval = 0, const std::vector<reco::PFCandidateRef>& particlesInIsoMap = {});
+    double getPfIsoSubUE(const reco::Photon& photon, int pfId, double r1=0.4, double r2=0.00, double threshold=0, double jWidth=0.0, int footprintRemoval = 0, const std::vector<reco::PFCandidateRef>& particlesInIsoMap = {});
 
     double getPfIso(const reco::GsfElectron& ele, int pfId, double r1=0.4, double r2=0.00, double threshold=0);
 
