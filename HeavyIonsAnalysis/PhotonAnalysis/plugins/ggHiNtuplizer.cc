@@ -52,7 +52,7 @@ ggHiNtuplizer::ggHiNtuplizer(const edm::ParameterSet& ps) :
   if (doMuons_)
     recoMuonsCollection_    = consumes<edm::View<reco::Muon>>(ps.getParameter<edm::InputTag>("recoMuonSrc"));
   vtxCollection_          = consumes<std::vector<reco::Vertex>>(ps.getParameter<edm::InputTag>("VtxLabel"));
-  doEReg_                 = ps.getParameter<bool>("doEleERegression");
+  doEleEReg_              = ps.getParameter<bool>("doEleERegression");
   if (useValMapIso_) {
     recoPhotonsHiIso_     = consumes<edm::ValueMap<reco::HIPhotonIsolation> > (
       ps.getParameter<edm::InputTag>("recoPhotonHiIsolationMap"));
@@ -60,12 +60,13 @@ ggHiNtuplizer::ggHiNtuplizer(const edm::ParameterSet& ps) :
   if (doEffectiveAreas_) {
       rhoToken_ = consumes<double>(ps.getParameter<edm::InputTag>("rho"));
   }
-  if (doRecHitsEB_ || doEReg_) {
+  doPhoEReg_              = ps.getParameter<bool>("doPhoERegression");
+  if (doRecHitsEB_ || doEleEReg_) {
       recHitsEB_ = consumes<EcalRecHitCollection> (
         ps.getUntrackedParameter<edm::InputTag>("recHitsEB",
           edm::InputTag("ecalRecHit","EcalRecHitsEB")));
   }
-  if (doRecHitsEE_ || doEReg_) {
+  if (doRecHitsEE_ || doEleEReg_) {
       recHitsEE_ = consumes<EcalRecHitCollection> (
         ps.getUntrackedParameter<edm::InputTag>("recHitsEE",
           edm::InputTag("ecalRecHit","EcalRecHitsEE")));
@@ -215,7 +216,7 @@ ggHiNtuplizer::ggHiNtuplizer(const edm::ParameterSet& ps) :
     tree_->Branch("eleBC2E",               &eleBC2E_);
     tree_->Branch("eleBC2Eta",             &eleBC2Eta_);
 
-    if (doEReg_) {
+    if (doEleEReg_) {
       tree_->Branch("eleSeedE3x3",         &eleSeedE3x3_);
       tree_->Branch("eleSeedE5x5",         &eleSeedE5x5_);
       tree_->Branch("eleSEE",              &eleSEE_);
@@ -301,32 +302,73 @@ ggHiNtuplizer::ggHiNtuplizer(const edm::ParameterSet& ps) :
     tree_->Branch("phoHasPixelSeed",       &phoHasPixelSeed_);
     tree_->Branch("phoHasConversionTracks",&phoHasConversionTracks_);
     // tree_->Branch("phoEleVeto",            &phoEleVeto_);        // TODO: not available in reco::
-    tree_->Branch("phoR9",                 &phoR9_);
     tree_->Branch("phoHadTowerOverEm",     &phoHadTowerOverEm_);
     tree_->Branch("phoHoverE",             &phoHoverE_);
+    tree_->Branch("phoHoverEValid",        &phoHoverEValid_);
     tree_->Branch("phoSigmaIEtaIEta",      &phoSigmaIEtaIEta_);
-    tree_->Branch("phoSigmaIEtaIPhi",      &phoSigmaIEtaIPhi_);
-    tree_->Branch("phoSigmaIPhiIPhi",      &phoSigmaIPhiIPhi_);
+    tree_->Branch("phoR9",                 &phoR9_);
     tree_->Branch("phoE1x5",               &phoE1x5_);
     tree_->Branch("phoE2x5",               &phoE2x5_);
     tree_->Branch("phoE3x3",               &phoE3x3_);
     tree_->Branch("phoE5x5",               &phoE5x5_);
     tree_->Branch("phoMaxEnergyXtal",      &phoMaxEnergyXtal_);
     tree_->Branch("phoSigmaEtaEta",        &phoSigmaEtaEta_);
-    tree_->Branch("phoR1x5",               &phoR1x5_);
-    tree_->Branch("phoR2x5",               &phoR2x5_);
-    tree_->Branch("phoR9_2012",            &phoR9_2012_);
     tree_->Branch("phoSigmaIEtaIEta_2012", &phoSigmaIEtaIEta_2012_);
-    tree_->Branch("phoSigmaIEtaIPhi_2012", &phoSigmaIEtaIPhi_2012_);
-    tree_->Branch("phoSigmaIPhiIPhi_2012", &phoSigmaIPhiIPhi_2012_);
+    tree_->Branch("phoR9_2012",            &phoR9_2012_);
     tree_->Branch("phoE1x5_2012",          &phoE1x5_2012_);
     tree_->Branch("phoE2x5_2012",          &phoE2x5_2012_);
     tree_->Branch("phoE3x3_2012",          &phoE3x3_2012_);
     tree_->Branch("phoE5x5_2012",          &phoE5x5_2012_);
     tree_->Branch("phoMaxEnergyXtal_2012", &phoMaxEnergyXtal_2012_);
     tree_->Branch("phoSigmaEtaEta_2012",   &phoSigmaEtaEta_2012_);
-    tree_->Branch("phoR1x5_2012",          &phoR1x5_2012_);
-    tree_->Branch("phoR2x5_2012",          &phoR2x5_2012_);
+
+    if (doPhoEReg_) {
+
+      tree_->Branch("phoHadTowerOverEm1", &phoHadTowerOverEm1_);
+      tree_->Branch("phoHadTowerOverEm2", &phoHadTowerOverEm2_);
+      tree_->Branch("phoHoverE1",         &phoHoverE1_);
+      tree_->Branch("phoHoverE2",         &phoHoverE2_);
+
+      tree_->Branch("phoSigmaIEtaIPhi",   &phoSigmaIEtaIPhi_);
+      tree_->Branch("phoSigmaIPhiIPhi",   &phoSigmaIPhiIPhi_);
+      tree_->Branch("phoR1x5",            &phoR1x5_);
+      tree_->Branch("phoR2x5",            &phoR2x5_);
+      tree_->Branch("phoE2nd",            &phoE2nd_);
+      tree_->Branch("phoETop",            &phoETop_);
+      tree_->Branch("phoEBottom",         &phoEBottom_);
+      tree_->Branch("phoELeft",           &phoELeft_);
+      tree_->Branch("phoERight",          &phoERight_);
+      tree_->Branch("phoE1x3",            &phoE1x3_);
+      tree_->Branch("phoE2x2",            &phoE2x2_);
+      tree_->Branch("phoE2x5Max",         &phoE2x5Max_);
+      tree_->Branch("phoE2x5Top",         &phoE2x5Top_);
+      tree_->Branch("phoE2x5Bottom",      &phoE2x5Bottom_);
+      tree_->Branch("phoE2x5Left",        &phoE2x5Left_);
+      tree_->Branch("phoE2x5Right",       &phoE2x5Right_);
+      //tree_->Branch("phoSMMajor",         &phoSMMajor_);
+      //tree_->Branch("phoSMMinor",         &phoSMMinor_);
+      //tree_->Branch("phoSMAlpha",         &phoSMAlpha_);
+
+      tree_->Branch("phoSigmaIEtaIPhi_2012", &phoSigmaIEtaIPhi_2012_);
+      tree_->Branch("phoSigmaIPhiIPhi_2012", &phoSigmaIPhiIPhi_2012_);
+      tree_->Branch("phoR1x5_2012",          &phoR1x5_2012_);
+      tree_->Branch("phoR2x5_2012",          &phoR2x5_2012_);
+      tree_->Branch("phoE2nd_2012",          &phoE2nd_2012_);
+      tree_->Branch("phoETop_2012",          &phoETop_2012_);
+      tree_->Branch("phoEBottom_2012",       &phoEBottom_2012_);
+      tree_->Branch("phoELeft_2012",         &phoELeft_2012_);
+      tree_->Branch("phoERight_2012",        &phoERight_2012_);
+      tree_->Branch("phoE1x3_2012",          &phoE1x3_2012_);
+      tree_->Branch("phoE2x2_2012",          &phoE2x2_2012_);
+      tree_->Branch("phoE2x5Max_2012",       &phoE2x5Max_2012_);
+      tree_->Branch("phoE2x5Top_2012",       &phoE2x5Top_2012_);
+      tree_->Branch("phoE2x5Bottom_2012",    &phoE2x5Bottom_2012_);
+      tree_->Branch("phoE2x5Left_2012",      &phoE2x5Left_2012_);
+      tree_->Branch("phoE2x5Right_2012",     &phoE2x5Right_2012_);
+      //tree_->Branch("phoSMMajor_2012",       &phoSMMajor_2012_);
+      //tree_->Branch("phoSMMinor_2012",       &phoSMMinor_2012_);
+      //tree_->Branch("phoSMAlpha_2012",       &phoSMAlpha_2012_);
+    }
 
     tree_->Branch("phoBC1E",               &phoBC1E_);
     tree_->Branch("phoBC1Ecorr",           &phoBC1Ecorr_);
@@ -588,7 +630,7 @@ void ggHiNtuplizer::analyze(const edm::Event& e, const edm::EventSetup& es)
     eleSeedCryIeta_       .clear();
     eleSeedCryIphi_       .clear();
 
-    if (doEReg_) {
+    if (doEleEReg_) {
       eleSeedE3x3_        .clear();
       eleSeedE5x5_        .clear();
       eleSEE_             .clear();
@@ -676,32 +718,73 @@ void ggHiNtuplizer::analyze(const edm::Event& e, const edm::EventSetup& es)
     phoHasPixelSeed_      .clear();
     phoHasConversionTracks_.clear();
     // phoEleVeto_           .clear();  // TODO: not available in reco::
-    phoR9_                .clear();
     phoHadTowerOverEm_    .clear();
     phoHoverE_            .clear();
+    phoHoverEValid_       .clear();
     phoSigmaIEtaIEta_     .clear();
-    phoSigmaIEtaIPhi_     .clear();
-    phoSigmaIPhiIPhi_     .clear();
+    phoR9_                .clear();
     phoE1x5_              .clear();
     phoE2x5_              .clear();
     phoE3x3_              .clear();
     phoE5x5_              .clear();
     phoMaxEnergyXtal_     .clear();
     phoSigmaEtaEta_       .clear();
-    phoR1x5_              .clear();
-    phoR2x5_              .clear();
-    phoR9_2012_           .clear();
     phoSigmaIEtaIEta_2012_.clear();
-    phoSigmaIEtaIPhi_2012_.clear();
-    phoSigmaIPhiIPhi_2012_.clear();
+    phoR9_2012_           .clear();
     phoE1x5_2012_         .clear();
     phoE2x5_2012_         .clear();
     phoE3x3_2012_         .clear();
     phoE5x5_2012_         .clear();
     phoMaxEnergyXtal_2012_.clear();
     phoSigmaEtaEta_2012_  .clear();
-    phoR1x5_2012_         .clear();
-    phoR2x5_2012_         .clear();
+
+    if (doPhoEReg_) {
+
+      phoHadTowerOverEm1_ .clear();
+      phoHadTowerOverEm2_ .clear();
+      phoHoverE1_         .clear();
+      phoHoverE2_         .clear();
+
+      phoSigmaIEtaIPhi_   .clear();
+      phoSigmaIPhiIPhi_   .clear();
+      phoR1x5_            .clear();
+      phoR2x5_            .clear();
+      phoE2nd_            .clear();
+      phoETop_            .clear();
+      phoEBottom_         .clear();
+      phoELeft_           .clear();
+      phoERight_          .clear();
+      phoE1x3_            .clear();
+      phoE2x2_            .clear();
+      phoE2x5Max_         .clear();
+      phoE2x5Top_         .clear();
+      phoE2x5Bottom_      .clear();
+      phoE2x5Left_        .clear();
+      phoE2x5Right_       .clear();
+      //phoSMMajor_         .clear();
+      //phoSMMinor_         .clear();
+      //phoSMAlpha_         .clear();
+
+      phoSigmaIEtaIPhi_2012_.clear();
+      phoSigmaIPhiIPhi_2012_.clear();
+      phoR1x5_2012_       .clear();
+      phoR2x5_2012_       .clear();
+      phoE2nd_2012_       .clear();
+      phoETop_2012_       .clear();
+      phoEBottom_2012_    .clear();
+      phoELeft_2012_      .clear();
+      phoERight_2012_     .clear();
+      phoE1x3_2012_       .clear();
+      phoE2x2_2012_       .clear();
+      phoE2x5Max_2012_    .clear();
+      phoE2x5Top_2012_    .clear();
+      phoE2x5Bottom_2012_ .clear();
+      phoE2x5Left_2012_   .clear();
+      phoE2x5Right_2012_  .clear();
+      //phoSMMajor_2012_    .clear();
+      //phoSMMinor_2012_    .clear();
+      //phoSMAlpha_2012_    .clear();
+    }
 
     phoBC1E_              .clear();
     phoBC1Ecorr_          .clear();
@@ -872,12 +955,12 @@ void ggHiNtuplizer::analyze(const edm::Event& e, const edm::EventSetup& es)
   es.get<TransientTrackRecord>().get("TransientTrackBuilder", trackBuilder);
   tb = trackBuilder.product();
 
-  if (doRecHitsEB_ || doRecHitsEE_ || doEReg_) {
+  if (doRecHitsEB_ || doRecHitsEE_ || doEleEReg_) {
     edm::ESHandle<CaloGeometry> pGeo;
     es.get<CaloGeometryRecord>().get(pGeo);
     geo = pGeo.product();
   }
-  if (doEReg_) {
+  if (doEleEReg_) {
     edm::ESHandle<CaloTopology> pTopo;
     es.get<CaloTopologyRecord>().get(pTopo);
     topo = pTopo.product();
@@ -1074,7 +1157,7 @@ void ggHiNtuplizer::fillElectrons(const edm::Event& e, const edm::EventSetup& es
   edm::Handle<EcalRecHitCollection> recHitsEBHandle;
   edm::Handle<EcalRecHitCollection> recHitsEEHandle;
 
-  if (doEReg_) {
+  if (doEleEReg_) {
       e.getByToken(recHitsEB_, recHitsEBHandle);
       e.getByToken(recHitsEE_, recHitsEEHandle);
   }
@@ -1212,7 +1295,7 @@ void ggHiNtuplizer::fillElectrons(const edm::Event& e, const edm::EventSetup& es
     eleSeedPhi_           .push_back(ele->superCluster()->seed()->phi());
 
     /* regression variables */
-    if (doEReg_) {
+    if (doEleEReg_) {
       auto sch = std::make_unique<SuperClusterHelper>(
         &(*ele),
         ele->isEB() ? recHitsEBHandle.product() : recHitsEEHandle.product(),
@@ -1396,12 +1479,11 @@ void ggHiNtuplizer::fillPhotons(const edm::Event& e, const edm::EventSetup& es, 
     phoHasPixelSeed_  .push_back((int)pho->hasPixelSeed());
     phoHasConversionTracks_.push_back((int)pho->hasConversionTracks());
     // phoEleVeto_       .push_back((int)pho->passElectronVeto());   // TODO: not available in reco::
-    phoR9_            .push_back(pho->r9());
     phoHadTowerOverEm_.push_back(pho->hadTowOverEm());
     phoHoverE_        .push_back(pho->hadronicOverEm());
+    phoHoverEValid_   .push_back(pho->hadronicOverEmValid());
     phoSigmaIEtaIEta_ .push_back(pho->sigmaIetaIeta());
-    phoSigmaIEtaIPhi_ .push_back(pho->showerShapeVariables().sigmaIetaIphi);
-    phoSigmaIPhiIPhi_ .push_back(pho->showerShapeVariables().sigmaIphiIphi);
+    phoR9_            .push_back(pho->r9());
 
     // additional shower shape variables
     phoE3x3_          .push_back(pho->e3x3());
@@ -1410,22 +1492,64 @@ void ggHiNtuplizer::fillPhotons(const edm::Event& e, const edm::EventSetup& es, 
     phoE5x5_          .push_back(pho->e5x5());
     phoMaxEnergyXtal_ .push_back(pho->maxEnergyXtal());
     phoSigmaEtaEta_   .push_back(pho->sigmaEtaEta());
-    phoR1x5_          .push_back(pho->r1x5());
-    phoR2x5_          .push_back(pho->r2x5());
 
     // full 5x5
-    phoR9_2012_           .push_back(pho->full5x5_r9());
     phoSigmaIEtaIEta_2012_.push_back(pho->full5x5_sigmaIetaIeta());
-    phoSigmaIEtaIPhi_2012_.push_back(pho->full5x5_showerShapeVariables().sigmaIetaIphi);
-    phoSigmaIPhiIPhi_2012_.push_back(pho->full5x5_showerShapeVariables().sigmaIphiIphi);
+    phoR9_2012_           .push_back(pho->full5x5_r9());
     phoE1x5_2012_.push_back(pho->full5x5_e1x5());
     phoE2x5_2012_.push_back(pho->full5x5_e2x5());
     phoE3x3_2012_.push_back(pho->full5x5_e3x3());
     phoE5x5_2012_.push_back(pho->full5x5_e5x5());
     phoMaxEnergyXtal_2012_.push_back(pho->full5x5_maxEnergyXtal());
     phoSigmaEtaEta_2012_.push_back(pho->full5x5_sigmaEtaEta());
-    phoR1x5_2012_.push_back(pho->full5x5_r1x5());
-    phoR2x5_2012_.push_back(pho->full5x5_r2x5());
+
+    if (doPhoEReg_) {
+
+        phoHadTowerOverEm1_ .push_back(pho->hadTowDepth1OverEm());
+        phoHadTowerOverEm2_ .push_back(pho->hadTowDepth2OverEm());
+        phoHoverE1_         .push_back(pho->hadronicDepth1OverEm());
+        phoHoverE2_         .push_back(pho->hadronicDepth2OverEm());
+
+        phoSigmaIEtaIPhi_   .push_back(pho->showerShapeVariables().sigmaIetaIphi);
+        phoSigmaIPhiIPhi_   .push_back(pho->showerShapeVariables().sigmaIphiIphi);
+        phoR1x5_            .push_back(pho->r1x5());
+        phoR2x5_            .push_back(pho->r2x5());
+        phoE2nd_            .push_back(pho->showerShapeVariables().e2nd);
+        phoETop_            .push_back(pho->showerShapeVariables().eTop);
+        phoEBottom_         .push_back(pho->showerShapeVariables().eBottom);
+        phoELeft_           .push_back(pho->showerShapeVariables().eLeft);
+        phoERight_          .push_back(pho->showerShapeVariables().eRight);
+        phoE1x3_            .push_back(pho->showerShapeVariables().e1x3);
+        phoE2x2_            .push_back(pho->showerShapeVariables().e2x2);
+        phoE2x5Max_         .push_back(pho->showerShapeVariables().e2x5Max);
+        phoE2x5Top_         .push_back(pho->showerShapeVariables().e2x5Top);
+        phoE2x5Bottom_      .push_back(pho->showerShapeVariables().e2x5Bottom);
+        phoE2x5Left_        .push_back(pho->showerShapeVariables().e2x5Left);
+        phoE2x5Right_       .push_back(pho->showerShapeVariables().e2x5Right);
+        //phoSMMajor_         .push_back(pho->showerShapeVariables().smMajor);
+        //phoSMMinor_         .push_back(pho->showerShapeVariables().smMinor);
+        //phoSMAlpha_         .push_back(pho->showerShapeVariables().smAlpha);
+
+        phoSigmaIEtaIPhi_2012_.push_back(pho->full5x5_showerShapeVariables().sigmaIetaIphi);
+        phoSigmaIPhiIPhi_2012_.push_back(pho->full5x5_showerShapeVariables().sigmaIphiIphi);
+        phoR1x5_2012_       .push_back(pho->full5x5_r1x5());
+        phoR2x5_2012_       .push_back(pho->full5x5_r2x5());
+        phoE2nd_2012_       .push_back(pho->full5x5_showerShapeVariables().e2nd);
+        phoETop_2012_       .push_back(pho->full5x5_showerShapeVariables().eTop);
+        phoEBottom_2012_    .push_back(pho->full5x5_showerShapeVariables().eBottom);
+        phoELeft_2012_      .push_back(pho->full5x5_showerShapeVariables().eLeft);
+        phoERight_2012_     .push_back(pho->full5x5_showerShapeVariables().eRight);
+        phoE1x3_2012_       .push_back(pho->full5x5_showerShapeVariables().e1x3);
+        phoE2x2_2012_       .push_back(pho->full5x5_showerShapeVariables().e2x2);
+        phoE2x5Max_2012_    .push_back(pho->full5x5_showerShapeVariables().e2x5Max);
+        phoE2x5Top_2012_    .push_back(pho->full5x5_showerShapeVariables().e2x5Top);
+        phoE2x5Bottom_2012_ .push_back(pho->full5x5_showerShapeVariables().e2x5Bottom);
+        phoE2x5Left_2012_   .push_back(pho->full5x5_showerShapeVariables().e2x5Left);
+        phoE2x5Right_2012_  .push_back(pho->full5x5_showerShapeVariables().e2x5Right);
+        //phoSMMajor_2012_    .push_back(pho->full5x5_showerShapeVariables().smMajor);
+        //phoSMMinor_2012_    .push_back(pho->full5x5_showerShapeVariables().smMinor);
+        //phoSMAlpha_2012_    .push_back(pho->full5x5_showerShapeVariables().smAlpha);
+    }
 
     // seed BC
     if (pho->superCluster()->seed().isAvailable() && pho->superCluster()->seed().isNonnull()) {
