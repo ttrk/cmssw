@@ -13,6 +13,7 @@ ggHiNtuplizer = cms.EDAnalyzer(
     doElectronVID      = cms.bool(False),
     doEleERegression   = cms.bool(False),
     doEffectiveAreas   = cms.bool(False),
+    doPhoERegression   = cms.bool(False),
     doRecHitsEB        = cms.bool(False),
     doRecHitsEE        = cms.bool(False),
     recHitsEB          = cms.untracked.InputTag("ecalRecHit","EcalRecHitsEB"),

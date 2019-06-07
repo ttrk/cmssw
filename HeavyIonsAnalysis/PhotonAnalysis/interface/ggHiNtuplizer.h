@@ -58,9 +58,10 @@ class ggHiNtuplizer : public edm::EDAnalyzer {
    bool useValMapIso_;
    bool doPfIso_;
    bool removePhotonPfIsoFootprint_;
-   bool doEReg_;
+   bool doEleEReg_;
    bool doEffectiveAreas_;
    bool doVID_;
+   bool doPhoEReg_;
    bool doRecHitsEB_;
    bool doRecHitsEE_;
 
@@ -295,32 +296,72 @@ class ggHiNtuplizer : public edm::EDAnalyzer {
    std::vector<int>    phoHasPixelSeed_;
    std::vector<int>    phoHasConversionTracks_;
 // std::vector<int>    phoEleVeto_;         // TODO: not available in reco::
-   std::vector<float>  phoR9_;
    std::vector<float>  phoHadTowerOverEm_;
    std::vector<float>  phoHoverE_;
+   std::vector<int>    phoHoverEValid_;
    std::vector<float>  phoSigmaIEtaIEta_;
-   std::vector<float>  phoSigmaIEtaIPhi_;
-   std::vector<float>  phoSigmaIPhiIPhi_;
+   std::vector<float>  phoR9_;
    std::vector<float>  phoE1x5_;
    std::vector<float>  phoE2x5_;
    std::vector<float>  phoE3x3_;
    std::vector<float>  phoE5x5_;
    std::vector<float>  phoMaxEnergyXtal_;
    std::vector<float>  phoSigmaEtaEta_;
-   std::vector<float>  phoR1x5_;
-   std::vector<float>  phoR2x5_;
-   std::vector<float>  phoR9_2012_;
+
    std::vector<float>  phoSigmaIEtaIEta_2012_;
-   std::vector<float>  phoSigmaIEtaIPhi_2012_;
-   std::vector<float>  phoSigmaIPhiIPhi_2012_;
+   std::vector<float>  phoR9_2012_;
    std::vector<float>  phoE1x5_2012_;
    std::vector<float>  phoE2x5_2012_;
    std::vector<float>  phoE3x3_2012_;
    std::vector<float>  phoE5x5_2012_;
    std::vector<float>  phoMaxEnergyXtal_2012_;
    std::vector<float>  phoSigmaEtaEta_2012_;
+
+   std::vector<float>  phoHadTowerOverEm1_;
+   std::vector<float>  phoHadTowerOverEm2_;
+   std::vector<float>  phoHoverE1_;
+   std::vector<float>  phoHoverE2_;
+
+   std::vector<float>  phoSigmaIEtaIPhi_;
+   std::vector<float>  phoSigmaIPhiIPhi_;
+   std::vector<float>  phoR1x5_;
+   std::vector<float>  phoR2x5_;
+   std::vector<float>  phoE2nd_;
+   std::vector<float>  phoETop_;
+   std::vector<float>  phoEBottom_;
+   std::vector<float>  phoELeft_;
+   std::vector<float>  phoERight_;
+   std::vector<float>  phoE1x3_;
+   std::vector<float>  phoE2x2_;
+   std::vector<float>  phoE2x5Max_;
+   std::vector<float>  phoE2x5Top_;
+   std::vector<float>  phoE2x5Bottom_;
+   std::vector<float>  phoE2x5Left_;
+   std::vector<float>  phoE2x5Right_;
+   //std::vector<float>  phoSMMajor_;   // TODO: enable when they become available in future releases
+   //std::vector<float>  phoSMMinor_;   // TODO: enable when they become available in future releases
+   //std::vector<float>  phoSMAlpha_;   // TODO: enable when they become available in future releases
+
+   std::vector<float>  phoSigmaIEtaIPhi_2012_;
+   std::vector<float>  phoSigmaIPhiIPhi_2012_;
    std::vector<float>  phoR1x5_2012_;
    std::vector<float>  phoR2x5_2012_;
+   std::vector<float>  phoE2nd_2012_;
+   std::vector<float>  phoETop_2012_;
+   std::vector<float>  phoEBottom_2012_;
+   std::vector<float>  phoELeft_2012_;
+   std::vector<float>  phoERight_2012_;
+   std::vector<float>  phoE1x3_2012_;
+   std::vector<float>  phoE2x2_2012_;
+   std::vector<float>  phoE2x5Max_2012_;
+   std::vector<float>  phoE2x5Top_2012_;
+   std::vector<float>  phoE2x5Bottom_2012_;
+   std::vector<float>  phoE2x5Left_2012_;
+   std::vector<float>  phoE2x5Right_2012_;
+   //std::vector<float>  phoSMMajor_2012_;   // TODO: enable when they become available in future releases
+   //std::vector<float>  phoSMMinor_2012_;   // TODO: enable when they become available in future releases
+   //std::vector<float>  phoSMAlpha_2012_;   // TODO: enable when they become available in future releases
+
    std::vector<float>  phoBC1E_;
    std::vector<float>  phoBC1Ecorr_;
    std::vector<float>  phoBC1Eta_;
