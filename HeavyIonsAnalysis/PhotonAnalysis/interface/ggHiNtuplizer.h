@@ -460,6 +460,27 @@ class ggHiNtuplizer : public edm::EDAnalyzer {
    std::vector<float> pfpIso4subSCsubUE_;
    std::vector<float> pfpIso5subSCsubUE_;
 
+   // photon pf isolation with pT cut and UE-subtracted
+   std::vector<float> pfcIso1pTgt1p0subUE_;
+   std::vector<float> pfcIso2pTgt1p0subUE_;
+   std::vector<float> pfcIso3pTgt1p0subUE_;
+   std::vector<float> pfcIso4pTgt1p0subUE_;
+   std::vector<float> pfcIso5pTgt1p0subUE_;
+
+   std::vector<float> pfcIso1pTgt2p0subUE_;
+   std::vector<float> pfcIso2pTgt2p0subUE_;
+   std::vector<float> pfcIso3pTgt2p0subUE_;
+   std::vector<float> pfcIso4pTgt2p0subUE_;
+   std::vector<float> pfcIso5pTgt2p0subUE_;
+
+   // remove if deemed useless
+   std::vector<float> pfcIso1pTgt3p0subUE_;
+   std::vector<float> pfcIso2pTgt3p0subUE_;
+   std::vector<float> pfcIso3pTgt3p0subUE_;
+   std::vector<float> pfcIso4pTgt3p0subUE_;
+   std::vector<float> pfcIso5pTgt3p0subUE_;
+   // remove if deemed useless - END
+
    // reco::Muon
    Int_t          nMu_;
    std::vector<float>  muPt_;
