@@ -472,6 +472,24 @@ ggHiNtuplizer::ggHiNtuplizer(const edm::ParameterSet& ps) :
       tree_->Branch("pfpIso3subSCsubUE",&pfpIso3subSCsubUE_);
       tree_->Branch("pfpIso4subSCsubUE",&pfpIso4subSCsubUE_);
       tree_->Branch("pfpIso5subSCsubUE",&pfpIso5subSCsubUE_);
+
+      tree_->Branch("pfcIso1pTgt1p0subUE",&pfcIso1pTgt1p0subUE_);
+      tree_->Branch("pfcIso2pTgt1p0subUE",&pfcIso2pTgt1p0subUE_);
+      tree_->Branch("pfcIso3pTgt1p0subUE",&pfcIso3pTgt1p0subUE_);
+      tree_->Branch("pfcIso4pTgt1p0subUE",&pfcIso4pTgt1p0subUE_);
+      tree_->Branch("pfcIso5pTgt1p0subUE",&pfcIso5pTgt1p0subUE_);
+
+      tree_->Branch("pfcIso1pTgt2p0subUE",&pfcIso1pTgt2p0subUE_);
+      tree_->Branch("pfcIso2pTgt2p0subUE",&pfcIso2pTgt2p0subUE_);
+      tree_->Branch("pfcIso3pTgt2p0subUE",&pfcIso3pTgt2p0subUE_);
+      tree_->Branch("pfcIso4pTgt2p0subUE",&pfcIso4pTgt2p0subUE_);
+      tree_->Branch("pfcIso5pTgt2p0subUE",&pfcIso5pTgt2p0subUE_);
+
+      tree_->Branch("pfcIso1pTgt3p0subUE",&pfcIso1pTgt3p0subUE_);
+      tree_->Branch("pfcIso2pTgt3p0subUE",&pfcIso2pTgt3p0subUE_);
+      tree_->Branch("pfcIso3pTgt3p0subUE",&pfcIso3pTgt3p0subUE_);
+      tree_->Branch("pfcIso4pTgt3p0subUE",&pfcIso4pTgt3p0subUE_);
+      tree_->Branch("pfcIso5pTgt3p0subUE",&pfcIso5pTgt3p0subUE_);
     }
   }
 
@@ -898,6 +916,21 @@ void ggHiNtuplizer::analyze(const edm::Event& e, const edm::EventSetup& es)
       pfpIso3subSCsubUE_.clear();
       pfpIso4subSCsubUE_.clear();
       pfpIso5subSCsubUE_.clear();
+      pfcIso1pTgt1p0subUE_.clear();
+      pfcIso2pTgt1p0subUE_.clear();
+      pfcIso3pTgt1p0subUE_.clear();
+      pfcIso4pTgt1p0subUE_.clear();
+      pfcIso5pTgt1p0subUE_.clear();
+      pfcIso1pTgt2p0subUE_.clear();
+      pfcIso2pTgt2p0subUE_.clear();
+      pfcIso3pTgt2p0subUE_.clear();
+      pfcIso4pTgt2p0subUE_.clear();
+      pfcIso5pTgt2p0subUE_.clear();
+      pfcIso1pTgt3p0subUE_.clear();
+      pfcIso2pTgt3p0subUE_.clear();
+      pfcIso3pTgt3p0subUE_.clear();
+      pfcIso4pTgt3p0subUE_.clear();
+      pfcIso5pTgt3p0subUE_.clear();
     }
   }
 
@@ -1765,6 +1798,24 @@ void ggHiNtuplizer::fillPhotons(const edm::Event& e, const edm::EventSetup& es, 
       pfpIso3subSCsubUE_.push_back( pfIso.getPfIsoSubUE(*pho, reco::PFCandidate::gamma, 0.3, 0.0, 0.0, 0, pfIsoCalculator::removeSCenergy));
       pfpIso4subSCsubUE_.push_back( pfIso.getPfIsoSubUE(*pho, reco::PFCandidate::gamma, 0.4, 0.0, 0.0, 0, pfIsoCalculator::removeSCenergy));
       pfpIso5subSCsubUE_.push_back( pfIso.getPfIsoSubUE(*pho, reco::PFCandidate::gamma, 0.5, 0.0, 0.0, 0, pfIsoCalculator::removeSCenergy));
+
+      pfcIso1pTgt1p0subUE_.push_back( pfIso.getPfIsoSubUE(*pho, reco::PFCandidate::h, 0.1, 0.0, 1.0, 0, pfIsoCalculator::removePFcand, particlesInIsoMap));
+      pfcIso2pTgt1p0subUE_.push_back( pfIso.getPfIsoSubUE(*pho, reco::PFCandidate::h, 0.2, 0.0, 1.0, 0, pfIsoCalculator::removePFcand, particlesInIsoMap));
+      pfcIso3pTgt1p0subUE_.push_back( pfIso.getPfIsoSubUE(*pho, reco::PFCandidate::h, 0.3, 0.0, 1.0, 0, pfIsoCalculator::removePFcand, particlesInIsoMap));
+      pfcIso4pTgt1p0subUE_.push_back( pfIso.getPfIsoSubUE(*pho, reco::PFCandidate::h, 0.4, 0.0, 1.0, 0, pfIsoCalculator::removePFcand, particlesInIsoMap));
+      pfcIso5pTgt1p0subUE_.push_back( pfIso.getPfIsoSubUE(*pho, reco::PFCandidate::h, 0.5, 0.0, 1.0, 0, pfIsoCalculator::removePFcand, particlesInIsoMap));
+
+      pfcIso1pTgt2p0subUE_.push_back( pfIso.getPfIsoSubUE(*pho, reco::PFCandidate::h, 0.1, 0.0, 2.0, 0, pfIsoCalculator::removePFcand, particlesInIsoMap));
+      pfcIso2pTgt2p0subUE_.push_back( pfIso.getPfIsoSubUE(*pho, reco::PFCandidate::h, 0.2, 0.0, 2.0, 0, pfIsoCalculator::removePFcand, particlesInIsoMap));
+      pfcIso3pTgt2p0subUE_.push_back( pfIso.getPfIsoSubUE(*pho, reco::PFCandidate::h, 0.3, 0.0, 2.0, 0, pfIsoCalculator::removePFcand, particlesInIsoMap));
+      pfcIso4pTgt2p0subUE_.push_back( pfIso.getPfIsoSubUE(*pho, reco::PFCandidate::h, 0.4, 0.0, 2.0, 0, pfIsoCalculator::removePFcand, particlesInIsoMap));
+      pfcIso5pTgt2p0subUE_.push_back( pfIso.getPfIsoSubUE(*pho, reco::PFCandidate::h, 0.5, 0.0, 2.0, 0, pfIsoCalculator::removePFcand, particlesInIsoMap));
+
+      pfcIso1pTgt3p0subUE_.push_back( pfIso.getPfIsoSubUE(*pho, reco::PFCandidate::h, 0.1, 0.0, 3.0, 0, pfIsoCalculator::removePFcand, particlesInIsoMap));
+      pfcIso2pTgt3p0subUE_.push_back( pfIso.getPfIsoSubUE(*pho, reco::PFCandidate::h, 0.2, 0.0, 3.0, 0, pfIsoCalculator::removePFcand, particlesInIsoMap));
+      pfcIso3pTgt3p0subUE_.push_back( pfIso.getPfIsoSubUE(*pho, reco::PFCandidate::h, 0.3, 0.0, 3.0, 0, pfIsoCalculator::removePFcand, particlesInIsoMap));
+      pfcIso4pTgt3p0subUE_.push_back( pfIso.getPfIsoSubUE(*pho, reco::PFCandidate::h, 0.4, 0.0, 3.0, 0, pfIsoCalculator::removePFcand, particlesInIsoMap));
+      pfcIso5pTgt3p0subUE_.push_back( pfIso.getPfIsoSubUE(*pho, reco::PFCandidate::h, 0.5, 0.0, 3.0, 0, pfIsoCalculator::removePFcand, particlesInIsoMap));
     }
 
     //////////////////////////////////// MC matching ////////////////////////////////////
