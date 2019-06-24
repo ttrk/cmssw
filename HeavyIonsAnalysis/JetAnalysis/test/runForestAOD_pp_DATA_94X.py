@@ -145,7 +145,9 @@ process.ggHiNtuplizerGED = process.ggHiNtuplizer.clone(
     doElectrons = True,
     doMuons = True,
     recoPhotonSrc = cms.InputTag('gedPhotons'),
-    recoPhotonHiIsolationMap = cms.InputTag('photonIsolationHIProducerppGED'))
+    recoPhotonHiIsolationMap = cms.InputTag('photonIsolationHIProducerppGED'),
+    removePhotonPfIsoFootprint = True,
+    particleBasedIsolationPhoton = cms.InputTag("particleBasedIsolation", "gedPhotons"))
 
 ####################################################################################
 
