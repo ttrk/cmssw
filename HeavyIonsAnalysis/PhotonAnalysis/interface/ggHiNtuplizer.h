@@ -298,7 +298,7 @@ class ggHiNtuplizer : public edm::EDAnalyzer {
 // std::vector<int>    phoEleVeto_;         // TODO: not available in reco::
    std::vector<float>  phoHadTowerOverEm_;
    std::vector<float>  phoHoverE_;
-   std::vector<int>    phoHoverEValid_;
+   //std::vector<int>    phoHoverEValid_;   // not available in 94X
    std::vector<float>  phoSigmaIEtaIEta_;
    std::vector<float>  phoR9_;
    std::vector<float>  phoE1x5_;
